@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadProof Agent — Slide Deck (Open Agent Hackathon 2026 · Track 02)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background: #e2e8f0;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .deck-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 0.65rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+    .slides-wrapper {
+      max-width: 1120px;
+      margin: 1.5rem auto 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      padding: 0 1rem;
+    }
+    .slide {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 2.4rem 2.8rem;
+      min-height: 620px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+    }
+    .slide-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .slide-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #2563eb;
+      background: #dbeafe;
+      padding: 0.22rem 0.7rem;
+      border-radius: 999px;
+    }
+    .slide-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 0.4rem 0 0.8rem;
+      color: #0f172a;
+      line-height: 1.15;
+    }
+    h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.85rem;
+      color: #0f172a;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .box h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .box p, .box li {
+      font-size: 0.88rem;
+      color: #334155;
+      margin: 0.3rem 0;
+    }
+    .code {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.76rem;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    .slide-footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 0.75rem;
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+    @media print {
+      body { background: #ffffff; }
+      .deck-nav { display: none !important; }
+      .slides-wrapper { margin: 0; max-width: 100%; padding: 0; gap: 0; }
+      .slide {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 0;
+        height: 680px;
+        padding: 1.5rem 2rem;
+        overflow: hidden;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="deck-nav">
+    <div style="font-weight:800; font-size:0.95rem;">
+      📊 LeadProof Agent — Official Hackathon Slide Deck (Rule 06.2)
+    </div>
+    <div style="display:flex; gap:0.55rem;">
+      <a href="/" class="btn">← Back to Live Interactive App</a>
+      <a href="/deck.pdf" target="_blank" class="btn btn-primary">📥 Download PDF (/deck.pdf)</a>
+    </div>
+  </nav>
+
+  <div class="slides-wrapper">
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">Open Agent Hackathon 2026 · Track 02: The Agent That Can Explain Why</span>
+          <span class="slide-num">Slide 01 / 08</span>
+        </div>
+        <div style="padding: 1.5rem 0;">
+          <div style="display:inline-block; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; font-weight:800; font-size:0.85rem; padding:0.35rem 0.85rem; border-radius:999px; margin-bottom:0.8rem;">
+            Built with Zetaris Super MCP + Meterless H-MEM &amp; Scout Intent + Live AI Synthesis
+          </div>
+          <h1>LeadProof Agent:<br/>The Autonomous Revenue Deal Desk &amp; Forensic Verifier That Can Explain <em>Why</em>.</h1>
+          <p style="font-size:1.12rem; color:#334155; max-width:880px; margin-bottom:1.5rem;">
+            Eliminating hallucinated lead scores and buyer bluffs by joining <strong>5 enterprise silos in-situ via Zetaris Federated SQL</strong>, enforcing <strong>Meterless H-MEM &amp; Scout Intent</strong> execution contracts, and giving revenue teams an interactive <strong>"What Would Change My Mind?" Counterfactual Simulator</strong>.
+          </p>
+          <div class="grid-3">
+            <div class="box" style="border-left:4px solid #2563eb;">
+              <h3>🌐 Live Production Demo</h3>
+              <p><strong>https://openagent.autoailead.com</strong><br/>Interactive Split-View Deal Desk + 5 Real Scenarios</p>
+            </div>
+            <div class="box" style="border-left:4px solid #059669;">
+              <h3>💻 Open-Source Repository</h3>
+              <p><strong>github.com/nathanro/autoailead-leadproof-agent</strong><br/>MIT License · Full Test Suite Passing (6/6)</p>
+            </div>
+            <div class="box" style="border-left:4px solid #d97706;">
+              <h3>👤 Builder &amp; Organization</h3>
+              <p><strong>Nathan Romano</strong> (Solo Builder)<br/>AutoAI Lead / PubliExpert LLC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>LeadProof Agent · AutoAI Lead (PubliExpert LLC)</span>
+        <span>https://openagent.autoailead.com</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: PROBLEM & TARGET USERS -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">01 · Problem &amp; Target Users</span>
+          <span class="slide-num">Slide 02 / 08</span>
+        </div>
+        <h2>Why Black-Box Revenue Agents Fail in Production</h2>
+        <p style="font-size:0.98rem; color:#334155; margin-bottom:1.1rem;">
+          Today’s AI sales &amp; reception agents evaluate incoming leads using only the text inside the chat window or a single CRM record. Because the ground truth is fragmented across Billing, Support, Product Telemetry, and Legal vaults, naive agents fail in three costly ways:
+        </p>
+        <div class="grid-3" style="margin-bottom:1.1rem;">
+          <div class="box" style="background:#fef2f2; border-color:#fecaca;">
+            <h3 style="color:#dc2626;">1. Deception &amp; Bad-Debt Traps</h3>
+            <p>A prospect claims <em>"We have 50 active Pro seats in good standing—unlock Enterprise API today."</em> A prompt-only LLM scores it 95/100 and auto-provisions keys to a 3-seat trial that owes <strong>$4,200 (47 days overdue)</strong>.</p>
+          </div>
+          <div class="box" style="background:#fffbeb; border-color:#fde68a;">
+            <h3 style="color:#d97706;">2. Procurement Discount Bluffs</h3>
+            <p>A buyer threatens to cancel at renewal unless given <strong>45% off</strong>, claiming <em>"our engineers barely use the tool."</em> Without telemetry federation, the AI panics and gives away <strong>$27,900 in margin</strong> when usage is actually <strong>98.4%</strong>.</p>
+          </div>
+          <div class="box" style="background:#eff6ff; border-color:#bfdbfe;">
+            <h3 style="color:#2563eb;">3. Zero Auditability ("Why 82?")</h3>
+            <p>When an AI outputs an opaque score without row-level citations or counterfactuals, RevOps, Deal Desk, and local clinic owners refuse to trust or automate high-stakes actions.</p>
+          </div>
+        </div>
+        <div class="box">
+          <h3>🎯 Target Users (From AutoAI Lead's 200+ SMB &amp; B2B Customer Base)</h3>
+          <p>
+            <strong>1. B2B SaaS RevOps &amp; Deal Desk Teams</strong> qualifying expansions, renewals, and custom payment terms.<br/>
+            <strong>2. High-Ticket Local Service Businesses</strong> (Dental Implant Clinics, Commercial HVAC Contractors) qualifying $5k–$15k emergency &amp; surgical cases on WhatsApp and phone.
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Problem &amp; Target Users</span>
+        <span>Track 02 — The Agent That Can Explain Why</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: THE SOLUTION -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">02 · The Solution</span>
+          <span class="slide-num">Slide 03 / 08</span>
+        </div>
+        <h2>LeadProof Agent: Every Verdict Backed by a 5-Silo Proof Tree</h2>
+        <div class="grid-2">
+          <div class="box">
+            <h3>🔍 1. Clickable 5-Silo Source Citations (<code>[SRC-1]</code>–<code>[SRC-5]</code>)</h3>
+            <p>Every claim in the agent’s verdict and drafted outreach is linked to a cryptographic SHA-256 row hash across CRM, Stripe Billing, Intercom Support, PostHog/Iceberg Telemetry, and Ironclad Legal contracts.</p>
+          </div>
+          <div class="box">
+            <h3>🚨 2. Cross-Silo Deception &amp; Bluff Detection</h3>
+            <p>Automatically contrasts what the buyer claims in chat against live federated data—catching overdue invoices, inflated seat counts, shadow engineering saturation, and CapEx signer limits.</p>
+          </div>
+          <div class="box">
+            <h3>🎛️ 3. "What Would Change My Mind?" Simulator</h3>
+            <p>Judges and operators can drag the live <strong>Discount % Slider</strong>, change <strong>Payment Terms</strong>, or toggle 5 evidence signals to see the exact threshold that flips a <code>HOLD</code> into <code>QUALIFIED_FAST_TRACK</code>.</p>
+          </div>
+          <div class="box">
+            <h3>💬 4. Live AI Interrogation &amp; Self-Healing Outreach</h3>
+            <p>Powered by live <code>muse-spark-1.3</code> inference + deterministic fallbacks: drafts ready-to-send WhatsApp/Email replies with embedded Stripe settlement or CFO CapEx sign-off links.</p>
+          </div>
+        </div>
+        <div class="box" style="margin-top:1rem; background:#ecfdf5; border-color:#6ee7b7;">
+          <h3 style="color:#059669;">💡 In One Sentence, Why We Thought Zetaris + Meterless Was Amazing:</h3>
+          <p style="font-size:0.95rem; font-weight:600; color:#065f46;">
+            “Combining Zetaris’s zero-ETL federated SQL with Meterless’s H-MEM and Scout execution contracts let our agent catch a $27,900 procurement bluff across 5 data silos in 39 milliseconds without moving a single byte of customer PII into an LLM prompt.”
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Solution Overview</span>
+        <span>https://openagent.autoailead.com</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: WORKFLOW & ARCHITECTURE -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">03 · Agent Workflow &amp; Technical Architecture</span>
+          <span class="slide-num">Slide 04 / 08</span>
+        </div>
+        <h2>End-to-End Governed Reasoning Pipeline</h2>
+        <pre class="code" style="font-size:0.75rem; line-height:1.4;">
+[1. Inbound Prospect Claim] (WhatsApp / Email / Voice Transcript + Requested Discount % &amp; Payment Terms)
+        │
+        ▼
+[2. Meterless Scout Intent Pipeline] (Sense → Interpret → 5-Layer Guard → Route → HMAC-SHA256 ExecutionContract)
+        │  Enforces RBAC, Injection Guard, Scope &amp; Tenant Spend Cap ($15.00) before any tool executes
+        ▼
+[3. Zetaris Super MCP · 5-Silo Federated SQL Pushdown] (Zero-ETL · Read-Only · MASK_CLS Enforced)
+   ├─ [SRC-1] zetaris_crm.hubspot_contacts        (Snowflake DWH: Role, Signer Authority Ceiling)
+   ├─ [SRC-2] zetaris_billing.stripe_subscriptions (PostgreSQL: Active Seats, Past-Due $, Delinquency)
+   ├─ [SRC-3] zetaris_support.intercom_tickets     (Intercom REST: P1 Locks, Clinical/CBCT Vault)
+   ├─ [SRC-4] zetaris_intent.posthog_events        (S3/Iceberg: 98.4% Shadow Engineering Saturation)
+   └─ [SRC-5] zetaris_legal.ironclad_contracts     (Oracle/Ironclad: Max Discount %, Allowed Terms)
+        │
+        ▼
+[4. Meterless H-MEM Hybrid Recall &amp; Conflict Detection]
+   ├─ Hybrid Score: clamp01(0.35·sem + 0.20·kw + 0.10·tag + 0.10·dom + 0.15·ent + 0.05·layer + 0.05·rec - 0.20·sup) × conf
+   └─ Logs conflict_detected / conflict_resolved to append-only TrustLedgerService
+        │
+        ▼
+[5. Explainable Proof Tree + Deal Desk Margin Simulator + Live AI Synthesis (muse-spark-1.3)]
+   └─ Outputs Verdict, 4-Pillar Score, Margin Protected ($), Counterfactual Sliders &amp; Cited Reply Draft</pre>
+        <div class="grid-3" style="margin-top:0.9rem;">
+          <div class="box">
+            <h3>Runtime &amp; Edge Stack</h3>
+            <p>Node.js 20+ ESM &amp; Cloudflare Workers Edge (`openagent.autoailead.com`) with zero heavy dependencies.</p>
+          </div>
+          <div class="box">
+            <h3>Sponsor Engines</h3>
+            <p><strong>Zetaris</strong> Federated SQL / Super MCP + <strong>Meterless</strong> H-MEM, Scout Intent &amp; Outcome Ledger.</p>
+          </div>
+          <div class="box">
+            <h3>Live AI Reasoning</h3>
+            <p>Live <code>muse-spark-1.3</code> structured JSON synthesis + NVIDIA Nemotron compatible OpenAI routing.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Architecture &amp; Data Flow</span>
+        <span>Zero-ETL Governance + Signed Contracts</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: HOW ZETARIS WAS USED -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">04 · Sponsor Deep-Dive: Zetaris Networked Data Platform</span>
+          <span class="slide-num">Slide 05 / 08</span>
+        </div>
+        <h2>How Zetaris Was Used &amp; What Made Our Approach Unique</h2>
+        <div class="grid-2">
+          <div>
+            <div class="box" style="margin-bottom:0.9rem;">
+              <h3>1. 5-Silo Cross-Platform Federated Joins (Zero-ETL)</h3>
+              <p>Instead of dumping raw CSVs into a vector DB, <code>ZetarisClient</code> executes a single federated SQL query across Snowflake, PostgreSQL, Intercom REST, S3/Iceberg, and Oracle/Ironclad with <code>ZERO_ETL = TRUE</code>.</p>
+            </div>
+            <div class="box" style="margin-bottom:0.9rem;">
+              <h3>2. Column-Level Security (<code>MASK_CLS</code>) &amp; Read-Only MCP</h3>
+              <p>Sensitive fields (<code>personal_phone</code>, <code>card_fingerprint</code>, <code>bank_routing</code>) are masked in-situ before reaching the agent. Any <code>UPDATE/DELETE/DROP</code> query is blocked with HTTP 403 and logged to the Zetaris audit trail.</p>
+            </div>
+            <div class="box">
+              <h3>3. Cryptographic Row Provenance &amp; Counterfactual Pushdown</h3>
+              <p>Every federated row returns a <code>sha256</code> digest and pushdown predicate so clicking <code>[SRC-1]</code>–<code>[SRC-5]</code> proves the exact record that triggered the decision.</p>
+            </div>
+          </div>
+          <div>
+            <pre class="code" style="margin:0; height:100%;">-- Zetaris Super MCP · 5-Silo Governed Query
+SELECT
+  c.record_id AS crm_id, c.verified_role,
+  MASK_CLS(c.personal_phone) AS personal_phone,
+  b.subscription_id, b.active_seats,
+  b.past_due_usd, b.billing_status,
+  MASK_CLS(b.card_fingerprint) AS card_fp,
+  s.ticket_id, s.open_escalations, s.status,
+  i.intent_score, i.usage_quota_pct,
+  i.active_engineers_count, i.anomaly_flag,
+  l.contract_id, l.max_discount_allowed_pct,
+  l.allowed_payment_terms, l.required_signer
+FROM zetaris_crm.hubspot_contacts c
+JOIN zetaris_billing.stripe_subscriptions b
+  ON c.account_key = b.account_key
+LEFT JOIN zetaris_support.intercom_tickets s
+  ON c.account_key = s.account_key
+LEFT JOIN zetaris_intent.posthog_events i
+  ON c.account_key = i.account_key
+LEFT JOIN zetaris_legal.ironclad_contracts l
+  ON c.account_key = l.account_key
+WHERE c.scenario_key = 'shadow-discount-bluff'
+WITH (ZETARIS_PUSHDOWN = TRUE, ZERO_ETL = TRUE);</pre>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Zetaris Integration Deep-Dive</span>
+        <span>5 Silos · 0 Bytes Moved · Read-Only Enforced</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: HOW METERLESS WAS USED -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">05 · Sponsor Deep-Dive: Meterless Open Engines &amp; Runtime</span>
+          <span class="slide-num">Slide 06 / 08</span>
+        </div>
+        <h2>How Meterless Was Used &amp; What Made Our Approach Unique</h2>
+        <div class="grid-2">
+          <div class="box">
+            <h3>1. Canonical H-MEM Hybrid Formula &amp; TrustLedgerService</h3>
+            <p>Implements the exact H-MEM specification (<code>engines/hmem/AGENTS.md</code>):</p>
+            <pre class="code" style="font-size:0.7rem; padding:0.6rem;">raw = 0.35·semantic + 0.20·keyword + 0.10·tag + 0.10·domain
+    + 0.15·entity   + 0.05·layer   + 0.05·recency − 0.20·superseded
+score = clamp01(raw) × confidence</pre>
+            <p>Includes live interactive feedback buttons (<code>👍 Helpful +0.05</code>, <code>👎 Not Helpful -0.03</code>, <code>⚠️ Wrong -0.20 + review</code>) and logs all 17 canonical audit actions to <code>TrustLedgerService</code>.</p>
+          </div>
+          <div class="box">
+            <h3>2. Scout Intent 5-Stage Signed Execution Contracts</h3>
+            <p>Implements <code>Sense → Interpret → Guard → Route → Recommend</code> (<code>engines/scout-intent/AGENTS.md</code>), issuing an immutable <code>hmac-sha256</code> signed <code>ExecutionContract</code> with a 5-layer guard stack before any Zetaris query runs.</p>
+            <h3 style="margin-top:0.8rem;">3. Outcome ROI &amp; Margin Protection Circuit Breaker</h3>
+            <p>Instead of billing per raw token, our Meterless ledger tracks <strong>Verified Margin Protected ($22,940–$28,200 per deal)</strong> vs. outcome unit cost (<code>$0.0018</code> cloud equivalent / <code>$0.00</code> on local Nightshift hotspot).</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Meterless Integration Deep-Dive</span>
+        <span>H-MEM + Scout Intent + Contract v4 Normalizer</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: PRODUCT VISUALS & 5 VERIFIED SCENARIOS -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">06 · Live Product Visuals &amp; Verified Case Studies</span>
+          <span class="slide-num">Slide 07 / 08</span>
+        </div>
+        <h2>Live Light-Mode Deal Desk UI (`openagent.autoailead.com`)</h2>
+        <div class="grid-2" style="align-items:center;">
+          <div>
+            <img src="/screenshot-live-app.png" alt="LeadProof Agent Live Screenshot" style="width:100%; border-radius:10px; border:1px solid #cbd5e1; box-shadow:0 4px 12px rgba(0,0,0,0.08);" />
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.55rem;">
+            <div class="box" style="padding:0.65rem 0.9rem;">
+              <h3>🚨 1. Apex Logistics ($24k ARR) — Deception Caught</h3>
+              <p>Claims 50 seats &amp; $0 overdue. Zetaris catches $4,200 overdue (47d) on 3 seats + P1 lock. <strong>Verdict: HOLD (14/100) · $28.2k Protected.</strong></p>
+            </div>
+            <div class="box" style="padding:0.65rem 0.9rem;">
+              <h3>🕵️ 2. Vanguard FinTech ($62k ARR) — Bluff Caught</h3>
+              <p>Demands 45% off claiming "low usage". Zetaris proves 98.4% engineering quota saturation + 8% MSA cap. <strong>Saves $22,940 margin.</strong></p>
+            </div>
+            <div class="box" style="padding:0.65rem 0.9rem;">
+              <h3>✅ 3. Meridian Health ($48k ARR) — Fast-Track</h3>
+              <p>94.2% clinic utilization, 18/18 paid invoices, HIPAA BAA pre-cleared. <strong>Verdict: FAST-TRACK (99/100).</strong></p>
+            </div>
+            <div class="box" style="padding:0.65rem 0.9rem;">
+              <h3>🦷 4. Smile Dental ($5.4k) &amp; 🔧 5. Lone Star HVAC ($14.2k)</h3>
+              <p>Verifies 3D CBCT scan `#SCAN-309` in vault (waiving $250 fee) &amp; splits $249 HVAC diagnostic from $14.2k CFO CapEx sign-off.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Live Product Visuals</span>
+        <span>Built with Cursor · Deployed on Cloudflare Edge</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: FUTURE ENHANCEMENTS & ROADMAP -->
+    <section class="slide">
+      <div>
+        <div class="slide-top">
+          <span class="slide-tag">07 · Future Enhancements &amp; Production Roadmap</span>
+          <span class="slide-num">Slide 08 / 08</span>
+        </div>
+        <h2>What’s Next for LeadProof Agent in AutoAI Lead</h2>
+        <div class="grid-3" style="margin-bottom:1.2rem;">
+          <div class="box">
+            <h3>1. Self-Healing Stripe &amp; Ironclad Webhooks</h3>
+            <p>When a delinquent prospect clicks the Stripe settlement link in LeadProof’s outreach draft and pays their overdue invoice, automatically trigger a Zetaris re-query and release the Enterprise API key in under 5 seconds.</p>
+          </div>
+          <div class="box">
+            <h3>2. Overnight Nightshift Account Audits</h3>
+            <p>Run Meterless Nightshift overnight across all 1,000+ CRM accounts over Zetaris Federated SQL—waking up every morning with verified expansion candidates and churn-bluff defenses at $0 cloud token cost.</p>
+          </div>
+          <div class="box">
+            <h3>3. Live Voice Deal Desk Co-Pilot</h3>
+            <p>Pair real-time bilingual voice transcription with instant Zetaris citation cards during live Zoom/phone negotiations so human AEs see real-time telemetry proof whenever a buyer bluffs.</p>
+          </div>
+        </div>
+        <div class="box" style="background:#eff6ff; border-color:#93c5fd; text-align:center; padding:1.4rem;">
+          <h3 style="font-size:1.2rem; color:#1d4ed8;">Try LeadProof Agent Live Now</h3>
+          <p style="font-size:1rem; font-weight:700; color:#0f172a; margin-top:0.35rem;">
+            Live App: <a href="https://openagent.autoailead.com">https://openagent.autoailead.com</a> &nbsp;·&nbsp;
+            Slide Deck: <a href="https://openagent.autoailead.com/deck">https://openagent.autoailead.com/deck</a> &nbsp;·&nbsp;
+            GitHub: <a href="https://github.com/nathanro/autoailead-leadproof-agent">github.com/nathanro/autoailead-leadproof-agent</a>
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Thank You Judges! · Zetaris + Meterless + GenAI Works</span>
+        <span>Nathan Romano · AutoAI Lead (PubliExpert LLC)</span>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "autoailead-leadproof-agent",
+  "version": "1.0.0",
+  "description": "LeadProof Agent — The Explainable Revenue & Lead Qualification Agent built on Zetaris Federated Data Lakehouse & Meterless Context/Metering Engines (Open Agent Hackathon 2026 · Track 02)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/smoke.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
+}

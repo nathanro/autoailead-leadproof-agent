@@ -1,0 +1,8 @@
+name = "autoailead-leadproof-agent"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[routes]]
+pattern = "openagent.autoailead.com"
+custom_domain = true

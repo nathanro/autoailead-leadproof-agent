@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadProof Agent — Autonomous Revenue Deal Desk & Explainable Forensic Verifier</title>
+  <style>
+    :root, [data-theme="light"] {
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-elevated: #eff6ff;
+      --text-main: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-soft: #dbeafe;
+      --success: #059669;
+      --success-soft: #d1fae5;
+      --success-border: #6ee7b7;
+      --warning: #d97706;
+      --warning-soft: #fef3c7;
+      --warning-border: #fcd34d;
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
+      --danger-border: #fca5a5;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.07);
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0b1120;
+      --bg-surface: #111827;
+      --bg-subtle: #1e293b;
+      --bg-elevated: #172554;
+      --text-main: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --border-strong: #334155;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-soft: rgba(59, 130, 246, 0.18);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.16);
+      --success-border: rgba(16, 185, 129, 0.4);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.16);
+      --warning-border: rgba(245, 158, 11, 0.4);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.16);
+      --danger-border: rgba(239, 68, 68, 0.45);
+      --code-bg: #030712;
+      --code-text: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Top Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.75rem 1.5rem;
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+    .pill-track {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.48rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      transition: all 0.15s ease;
+      text-decoration: none !important;
+    }
+    .btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--primary);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+      border-color: var(--success);
+    }
+    .btn-success:hover {
+      opacity: 0.92;
+      color: #ffffff;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 3rem;
+    }
+
+    /* Executive Hero Banner */
+    .hero-strip {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.1rem 1.35rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .hero-strip-left h1 {
+      margin: 0 0 0.3rem 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .hero-strip-left p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      max-width: 820px;
+    }
+    .hero-kpis {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .kpi-mini {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      min-width: 145px;
+    }
+    .kpi-mini-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .kpi-mini-val {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 0.1rem;
+    }
+
+    /* Scenario Selector Tabs */
+    .scenario-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+    .scenario-tab {
+      text-align: left;
+      background: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .scenario-tab:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .scenario-tab.active {
+      border-color: var(--primary);
+      background: var(--bg-elevated);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+    }
+    .scenario-tab-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      margin-bottom: 0.35rem;
+    }
+    .tone-danger { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger-border); }
+    .tone-warning { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning-border); }
+    .tone-success { background: var(--success-soft); color: var(--success); border: 1px solid var(--success-border); }
+    .tone-primary { background: var(--primary-soft); color: var(--primary); border: 1px solid var(--primary); }
+
+    .scenario-tab-title {
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+    .scenario-tab-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Main Split View (User-Facing Product First) */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 1.25rem;
+      align-items: start;
+      margin-bottom: 1.75rem;
+    }
+    @media (max-width: 1080px) {
+      .split-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 1.1rem;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Form Controls */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-bottom: 0.75rem;
+    }
+    .field-label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    .input, .textarea, .select {
+      width: 100%;
+      padding: 0.5rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-size: 0.83rem;
+      font-family: inherit;
+    }
+    .textarea {
+      min-height: 82px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    /* Prospect Claims List */
+    .claims-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin: 0.75rem 0;
+    }
+    .claim-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      font-size: 0.8rem;
+    }
+    .trap-callout {
+      background: var(--warning-soft);
+      border: 1px solid var(--warning-border);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.79rem;
+      margin-top: 0.75rem;
+    }
+
+    /* Deal Desk & Counterfactual Simulator */
+    .slider-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .cf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .cf-toggle {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-page);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cf-toggle:hover {
+      border-color: var(--primary);
+    }
+    .cf-toggle.active {
+      background: var(--success-soft);
+      border-color: var(--success-border);
+    }
+    .cf-toggle input {
+      margin-top: 0.2rem;
+      transform: scale(1.15);
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+
+    /* Right Column: Decision Banner & Score */
+    .verdict-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.15rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .verdict-banner.danger {
+      background: var(--danger-soft);
+      border: 2px solid var(--danger-border);
+    }
+    .verdict-banner.warning {
+      background: var(--warning-soft);
+      border: 2px solid var(--warning-border);
+    }
+    .verdict-banner.success {
+      background: var(--success-soft);
+      border: 2px solid var(--success-border);
+    }
+    .verdict-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .score-circle {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      background: var(--bg-surface);
+      padding: 0.5rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      font-weight: 800;
+    }
+    .score-big {
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    /* Deal Economics Strip */
+    .econ-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 720px) {
+      .econ-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .econ-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+    }
+    .econ-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .econ-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-top: 0.15rem;
+    }
+
+    /* Conflict Alerts */
+    .conflict-box {
+      background: var(--danger-soft);
+      border: 1px solid var(--danger-border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .conflict-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed var(--danger-border);
+      font-size: 0.82rem;
+    }
+    .conflict-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    /* Proof Tree Pillars */
+    .proof-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+    .proof-node {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+    }
+    .proof-node-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: var(--border-color);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 0.45rem;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    /* Citation Badges */
+    .src-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.12rem 0.48rem;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      cursor: pointer;
+      margin: 0 0.15rem;
+      transition: all 0.15s ease;
+    }
+    .src-badge:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Outreach Draft Box */
+    .outreach-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.83rem;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* Sponsor Deep-Dive Grid */
+    .sponsor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 1080px) {
+      .sponsor-grid { grid-template-columns: 1fr; }
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      overflow-x: auto;
+      line-height: 1.45;
+      margin: 0.5rem 0 0.85rem;
+    }
+
+    .source-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      margin-bottom: 0.55rem;
+      transition: all 0.2s ease;
+    }
+    .source-card.highlight {
+      border: 2px solid var(--primary);
+      background: var(--bg-elevated);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+
+    .memory-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      margin-bottom: 0.55rem;
+      font-size: 0.81rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-logo">LP</div>
+        <div>
+          <div class="brand-title">
+            LeadProof Agent
+            <span class="pill pill-track">Track 02 · The Agent That Can Explain Why</span>
+            <span class="pill">Zetaris Super MCP + Meterless H-MEM</span>
+          </div>
+          <div class="brand-sub">Autonomous Revenue Deal Desk & Cross-Silo Deception Forensic Engine · Built by AutoAI Lead (PubliExpert LLC)</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a href="/deck" class="btn btn-primary">📊 Interactive Slide Deck</a>
+        <a href="/deck.pdf" target="_blank" class="btn">📥 Download Deck PDF</a>
+        <a href="https://github.com/nathanro/autoailead-leadproof-agent" target="_blank" class="btn">💻 GitHub Repo</a>
+        <a href="https://autoailead.com" target="_blank" class="btn">🌐 AutoAI Lead SaaS</a>
+        <button id="themeToggleBtn" class="btn" onclick="toggleTheme()" title="Switch Light / Dark Mode">🌙 Dark Mode</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Executive Summary & Live Telemetry Ribbon -->
+    <section class="hero-strip">
+      <div class="hero-strip-left">
+        <h1>Every Revenue Decision Backed by Cryptographic Cross-Silo Proof — Zero Hallucinated Lead Scores.</h1>
+        <p>
+          Standard AI sales agents trust whatever a prospect types in chat—leaking Enterprise API keys to delinquent trials or giving away 45% renewal discounts to accounts at 98.4% engineering capacity. <strong>LeadProof Agent</strong> executes governed 5-silo <strong>Zetaris Federated SQL</strong> joins in-situ, verifies long-term policy invariants via <strong>Meterless H-MEM &amp; Scout Intent</strong>, and shows exactly <em>what would change its mind</em>.
+        </p>
+      </div>
+      <div class="hero-kpis">
+        <div class="kpi-mini">
+          <div class="kpi-mini-label">Zetaris Federated Silos</div>
+          <div class="kpi-mini-val" id="kpiSilos">5 Connected · 0 ETL</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-label">Margin Protected</div>
+          <div class="kpi-mini-val" id="kpiMarginProtected" style="color: var(--success);">$28,200 USD</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-label">Deceptions Blocked</div>
+          <div class="kpi-mini-val" id="kpiBlocked" style="color: var(--danger);">1 Caught</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-label">Meterless Unit Cost</div>
+          <div class="kpi-mini-val" id="kpiUnitCost">$0.0018 / proof</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 Real-World Scenario Selector Tabs -->
+    <section class="scenario-bar" id="scenarioTabs"></section>
+
+    <!-- USER-FACING INTERACTIVE PRODUCT SPLIT VIEW -->
+    <section class="split-grid">
+      <!-- LEFT COLUMN: Live Prospect Inbox + Deal Desk Counterfactual Simulator -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📥 1. Incoming Prospect Deal Request &amp; Claims</h2>
+            <span class="pill" id="activeChannelBadge">WhatsApp + Deal Desk</span>
+          </div>
+
+          <div class="form-grid">
+            <div>
+              <label class="field-label" for="inpLeadName">Prospect Name &amp; Role</label>
+              <input id="inpLeadName" class="input" type="text" value="Carlos Mendoza — VP of Operations" />
+            </div>
+            <div>
+              <label class="field-label" for="inpCompany">Company / Account</label>
+              <input id="inpCompany" class="input" type="text" value="Apex Logistics Corp" />
+            </div>
+            <div>
+              <label class="field-label" for="inpDealValue">Deal Value ($ USD ARR)</label>
+              <input id="inpDealValue" class="input" type="number" value="24000" />
+            </div>
+            <div>
+              <label class="field-label" for="inpEmail">Prospect Email</label>
+              <input id="inpEmail" class="input" type="text" value="cmendoza@apexlogistics.io" />
+            </div>
+          </div>
+
+          <label class="field-label" for="inpMessage">Incoming Prospect Message (Editable — Test Any Claim or Bluff)</label>
+          <textarea id="inpMessage" class="textarea"></textarea>
+
+          <div style="display:flex; gap:0.55rem; margin-top:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="runEvaluation(false, false)">⚡ Run 5-Silo Forensic Proof (&lt;50ms)</button>
+            <button class="btn btn-success" id="btnLiveAi" onclick="runEvaluation(false, true)">🧠 Deep Synthesis with Live AI (muse-spark-1.3)</button>
+          </div>
+
+          <div style="margin-top:0.9rem;">
+            <div class="field-label">Extracted Prospect Claims vs. Zetaris Cross-Silo Truth:</div>
+            <div class="claims-list" id="claimsList"></div>
+          </div>
+
+          <div class="trap-callout" id="naiveTrapBox"></div>
+        </div>
+
+        <!-- Interactive Counterfactual & Deal Desk Simulator -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🎛️ 2. "What Would Change My Mind?" Counterfactual Simulator</h2>
+            <button class="btn btn-success" onclick="flipToFastTrack()" style="padding:0.32rem 0.7rem; font-size:0.76rem;">✨ 1-Click Flip to Fast-Track</button>
+          </div>
+          <p style="margin:0 0 0.75rem; font-size:0.8rem; color:var(--text-secondary);">
+            Drag the discount slider or toggle underlying <strong>Zetaris</strong> data conditions to watch LeadProof recalculate the qualification score, margin impact, and proof tree in real time:
+          </p>
+
+          <div class="slider-box">
+            <div class="slider-row">
+              <span style="font-size:0.8rem; font-weight:700;">Proposed Deal Discount (%): <strong id="lblDiscountVal" style="color:var(--primary);">15%</strong></span>
+              <span class="pill" id="lblMsaCap">MSA Max Cap: 0% [SRC-5]</span>
+            </div>
+            <input type="range" id="rngDiscount" min="0" max="50" step="1" value="15" oninput="onDiscountSliderChange(this.value)" />
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.55rem; gap:0.5rem; flex-wrap:wrap;">
+              <span style="font-size:0.76rem; color:var(--text-muted);">Payment Terms:</span>
+              <select id="selTerms" class="select" style="width:auto; padding:0.28rem 0.55rem; font-size:0.78rem;" onchange="runEvaluation(true, false)">
+                <option value="Prepaid">Prepaid / Card on File</option>
+                <option value="Net-15">Net-15</option>
+                <option value="Net-30">Net-30</option>
+                <option value="Net-45">Net-45</option>
+                <option value="Net-60">Net-60</option>
+              </select>
+              <button class="btn" style="padding:0.25rem 0.55rem; font-size:0.74rem;" onclick="resetScenarioOverrides()">↺ Reset Defaults</button>
+            </div>
+          </div>
+
+          <div class="cf-list" id="counterfactualList"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Explainable Verdict, Proof Tree DAG, Live Interrogation & Outreach -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">⚖️ 3. Explainable Qualification Verdict &amp; Proof Tree</h2>
+            <span class="pill" id="evalMetaBadge">Query ID: zet_q_... · 39ms</span>
+          </div>
+
+          <!-- Verdict Banner -->
+          <div id="verdictBanner" class="verdict-banner danger">
+            <div>
+              <div style="font-size:0.74rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;" id="verdictSub">ZETARIS + METERLESS GOVERNED DECISION</div>
+              <div class="verdict-title" id="verdictLabel">BLOCK &amp; HOLD · CROSS-SILO DECEPTION DETECTED</div>
+              <div style="font-size:0.8rem; margin-top:0.2rem;" id="whatWouldChangeText"></div>
+            </div>
+            <div class="score-circle">
+              <span class="score-big" id="scoreVal">34</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">/ 100<br/><small id="confidenceVal">96% conf</small></span>
+            </div>
+          </div>
+
+          <!-- Deal Desk Economics Strip -->
+          <div class="econ-grid">
+            <div class="econ-box">
+              <div class="econ-label">Net Contract ARR</div>
+              <div class="econ-val" id="econNetArr">$20,400</div>
+            </div>
+            <div class="econ-box">
+              <div class="econ-label">Margin / Risk Protected</div>
+              <div class="econ-val" id="econProtected" style="color:var(--success);">$28,200</div>
+            </div>
+            <div class="econ-box">
+              <div class="econ-label">Gross Margin</div>
+              <div class="econ-val" id="econGrossMargin">73%</div>
+            </div>
+            <div class="econ-box">
+              <div class="econ-label">Win Probability</div>
+              <div class="econ-val" id="econWinProb">34%</div>
+            </div>
+          </div>
+
+          <!-- Cross-Silo Conflict Alert Box -->
+          <div id="conflictContainer" class="conflict-box"></div>
+
+          <!-- 4-Pillar Auditable Proof Tree -->
+          <div style="margin-bottom:1rem;">
+            <div class="field-label" style="margin-bottom:0.45rem;">Auditable 5-Silo Evidence Proof Tree (Click any <span class="src-badge">[SRC-*]</span> badge to inspect the exact Zetaris virtual table row):</div>
+            <div class="proof-list" id="proofTreeList"></div>
+          </div>
+
+          <!-- Recommended Action & Ready-to-Send Draft -->
+          <div style="background:var(--bg-elevated); border:1px solid var(--primary); border-radius:10px; padding:0.75rem 0.95rem; margin-bottom:0.9rem;">
+            <div style="font-size:0.74rem; font-weight:800; text-transform:uppercase; color:var(--primary); margin-bottom:0.2rem;">Recommended Autonomous Action</div>
+            <div id="recommendedActionText" style="font-size:0.85rem; font-weight:600;"></div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.4rem; flex-wrap:wrap;">
+              <span class="field-label" style="margin:0;">📲 Ready-to-Send Evidence-Backed Reply Draft (<span id="draftChannel">WhatsApp / Email</span>):</span>
+              <div style="display:flex; gap:0.4rem;">
+                <button class="btn" style="padding:0.28rem 0.65rem; font-size:0.75rem;" onclick="speakOutreachDraft()">🔊 Listen (Voice Readback)</button>
+                <button class="btn" style="padding:0.28rem 0.65rem; font-size:0.75rem;" onclick="copyOutreachDraft()">📋 Copy Draft</button>
+              </div>
+            </div>
+            <div style="font-size:0.77rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.3rem;" id="draftSubject"></div>
+            <div class="outreach-box" id="draftBody"></div>
+          </div>
+        </div>
+
+        <!-- Interactive "Interrogate the Agent ('Why?')" Live AI Box -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">💬 4. Interrogate the Forensic Agent ("Ask Why")</h2>
+            <span class="pill pill-track" id="askAiModeBadge">Live AI (`muse-spark-1.3`) + Zetaris Citations</span>
+          </div>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.6rem;">
+            <button class="btn" style="font-size:0.74rem; padding:0.25rem 0.55rem;" onclick="askPresetQuestion('Why did you block or flag this deal, and which exact Zetaris rows prove it?')">Why did you flag this deal?</button>
+            <button class="btn" style="font-size:0.74rem; padding:0.25rem 0.55rem;" onclick="askPresetQuestion('How much gross margin or bad-debt exposure did Zetaris + Meterless save here?')">How much margin was saved?</button>
+            <button class="btn" style="font-size:0.74rem; padding:0.25rem 0.55rem;" onclick="askPresetQuestion('What exact conditions must the prospect meet to unlock Fast-Track approval?')">What unlocks Fast-Track?</button>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <input id="inpAskQuestion" class="input" type="text" placeholder="Ask any question about this decision (e.g., 'Why reject Net-60?' or 'Prove the shadow usage bluff')..." />
+            <button class="btn btn-primary" onclick="submitForensicQuestion()">Ask Why</button>
+          </div>
+          <div id="askAnswerBox" style="margin-top:0.7rem; padding:0.75rem 0.9rem; border-radius:10px; background:var(--bg-subtle); border:1px solid var(--border-color); font-size:0.82rem; display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPONSOR TECHNICAL INSPECTOR SECTION (BELOW THE FOLD) -->
+    <section class="sponsor-grid">
+      <!-- ZETARIS 5-SILO FEDERATED LAKEHOUSE & SUPER MCP INSPECTOR -->
+      <div class="card" id="zetarisInspectorCard">
+        <div class="card-header">
+          <h2 class="card-title">🗄️ Zetaris Federated Data Lakehouse &amp; Super MCP Inspector</h2>
+          <span class="pill" style="background:var(--success-soft); color:var(--success); border-color:var(--success-border);">Zero-ETL · Read-Only MCP Enforced</span>
+        </div>
+        <p style="margin:0 0 0.65rem; font-size:0.8rem; color:var(--text-secondary);">
+          Zetaris pushes query computation directly to Snowflake, PostgreSQL, Intercom REST, AWS S3/Iceberg, and Oracle/Ironclad without copying raw PII into prompt context. Column-Level Security (<code>MASK_CLS</code>) masks phone numbers and card fingerprints in-situ.
+        </p>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <span class="field-label" style="margin:0;">Federated SQL Executed via Zetaris Query Director:</span>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn btn-primary" style="padding:0.28rem 0.65rem; font-size:0.74rem;" onclick="executeCustomZetarisSql(false)">▶ Run Federated SQL</button>
+            <button class="btn" style="padding:0.28rem 0.65rem; font-size:0.74rem; border-color:var(--danger); color:var(--danger);" onclick="executeCustomZetarisSql(true)">🛡️ Test Read-Only Guardrail (Try UPDATE)</button>
+          </div>
+        </div>
+
+        <textarea id="sqlEditor" class="code-block" style="width:100%; min-height:145px; border:1px solid var(--border-strong);"></textarea>
+        <div id="sqlStatusBanner" style="margin-bottom:0.75rem; font-size:0.79rem; display:none; padding:0.55rem 0.75rem; border-radius:8px;"></div>
+
+        <div class="field-label">5 Federated Source Rows &amp; Cryptographic Provenance Hashes:</div>
+        <div id="zetarisSourcesList"></div>
+      </div>
+
+      <!-- METERLESS CONTEXT ENGINES (H-MEM + SCOUT INTENT) & OUTCOME ROI LEDGER -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">⚡ Meterless Context Engines (H-MEM + Scout) &amp; Outcome ROI Ledger</h2>
+          <span class="pill pill-track" id="meterlessModePill">Contract v4 · meterless/deep</span>
+        </div>
+        <p style="margin:0 0 0.65rem; font-size:0.8rem; color:var(--text-secondary);">
+          Implements <strong>Meterless H-MEM</strong> (hybrid retrieval formula + append-only <code>TrustLedgerService</code>) and <strong>Scout Intent</strong> (5-stage pipeline issuing HMAC-SHA256 signed execution contracts) with outcome-based ROI circuit breakers.
+        </p>
+
+        <!-- Signed Scout Intent Execution Contract -->
+        <div class="field-label">Signed Scout Intent Execution Contract (<code>Sense → Interpret → Guard → Route → Recommend</code>):</div>
+        <pre class="code-block" id="scoutContractBox" style="max-height:175px; overflow-y:auto;"></pre>
+
+        <!-- H-MEM Reinjected Memories with Interactive Feedback Loop -->
+        <div class="field-label" style="margin-top:0.75rem;">H-MEM Reinjected Memories (Click Feedback Buttons to Test Live Confidence Adaptation):</div>
+        <div id="hmemMemoriesList"></div>
+
+        <!-- Meterless Outcome & Trust Ledger -->
+        <div class="field-label" style="margin-top:0.75rem;">Meterless Outcome &amp; H-MEM Trust Audit Ledger:</div>
+        <div id="meterlessLedgerList" style="max-height:210px; overflow-y:auto;"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let scenariosCatalog = [];
+    let currentScenarioId = 'trap-expansion-claim';
+    let currentOverrides = {};
+    let lastEvaluation = null;
+
+    function initTheme() {
+      const saved = localStorage.getItem('leadproof_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateThemeBtn(saved);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('leadproof_theme', next);
+      updateThemeBtn(next);
+    }
+
+    function updateThemeBtn(theme) {
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) {
+        btn.textContent = theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+      }
+    }
+
+    function formatCitationBadges(text) {
+      const safe = String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return safe.replace(/\[(SRC-\d)\]/g, '<span class="src-badge" onclick="highlightSource(\'$1\')">[$1]</span>');
+    }
+
+    function highlightSource(srcId) {
+      const allCards = document.querySelectorAll('.source-card');
+      allCards.forEach((c) => c.classList.remove('highlight'));
+      const target = document.getElementById('source-card-' + srcId);
+      if (target) {
+        target.classList.add('highlight');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    async function loadScenarios() {
+      const res = await fetch('/api/scenarios');
+      const data = await res.json();
+      scenariosCatalog = data.scenarios || [];
+      renderScenarioTabs();
+      selectScenario(data.defaultScenarioId || 'trap-expansion-claim');
+    }
+
+    function renderScenarioTabs() {
+      const container = document.getElementById('scenarioTabs');
+      container.innerHTML = scenariosCatalog
+        .map((s) => {
+          const isActive = s.id === currentScenarioId ? 'active' : '';
+          const toneClass = 'tone-' + (s.badgeTone || 'primary');
+          return `
+            <button class="scenario-tab ${isActive}" onclick="selectScenario('${s.id}')">
+              <span class="scenario-tab-badge ${toneClass}">${s.badge}</span>
+              <div class="scenario-tab-title">${s.company}</div>
+              <div class="scenario-tab-sub">$${Number(s.dealValueUSD).toLocaleString()} · ${s.vertical}</div>
+            </button>
+          `;
+        })
+        .join('');
+    }
+
+    function selectScenario(scenarioId) {
+      currentScenarioId = scenarioId;
+      const s = scenariosCatalog.find((item) => item.id === scenarioId) || scenariosCatalog[0];
+      if (!s) return;
+
+      currentOverrides = { ...(s.defaultOverrides || {}) };
+      document.getElementById('inpLeadName').value = `${s.leadName} — ${s.leadRole}`;
+      document.getElementById('inpCompany').value = s.company;
+      document.getElementById('inpDealValue').value = s.dealValueUSD;
+      document.getElementById('inpEmail').value = s.email;
+      document.getElementById('inpMessage').value = s.incomingMessage;
+      document.getElementById('activeChannelBadge').textContent = s.channel;
+
+      const disc = currentOverrides.proposedDiscountPct !== undefined ? currentOverrides.proposedDiscountPct : (s.requestedDiscountPct || 0);
+      document.getElementById('rngDiscount').value = disc;
+      document.getElementById('lblDiscountVal').textContent = disc + '%';
+
+      const terms = currentOverrides.proposedTerms || s.requestedTerms || 'Net-30';
+      const selTerms = document.getElementById('selTerms');
+      if ([...selTerms.options].some((o) => o.value === terms)) {
+        selTerms.value = terms;
+      }
+
+      document.getElementById('askAnswerBox').style.display = 'none';
+      renderScenarioTabs();
+      runEvaluation(false, false);
+    }
+
+    function onDiscountSliderChange(val) {
+      currentOverrides.proposedDiscountPct = Number(val);
+      document.getElementById('lblDiscountVal').textContent = val + '%';
+      runEvaluation(true, false);
+    }
+
+    function toggleCounterfactualKey(key) {
+      currentOverrides[key] = !currentOverrides[key];
+      runEvaluation(true, false);
+    }
+
+    function resetScenarioOverrides() {
+      selectScenario(currentScenarioId);
+    }
+
+    function flipToFastTrack() {
+      currentOverrides = {
+        billingPastDueCleared: true,
+        supportLockResolved: true,
+        decisionMakerVerified: true,
+        budgetVerified: true,
+        urgencyHigh: true,
+        proposedDiscountPct: 0,
+        proposedTerms: 'Net-30',
+      };
+      document.getElementById('rngDiscount').value = 0;
+      document.getElementById('lblDiscountVal').textContent = '0%';
+      document.getElementById('selTerms').value = 'Net-30';
+      runEvaluation(true, false);
+    }
+
+    async function runEvaluation(isCounterfactual = false, liveAi = false) {
+      const btnLive = document.getElementById('btnLiveAi');
+      if (liveAi && btnLive) {
+        btnLive.textContent = '⏳ Running Live muse-spark-1.3 Synthesis...';
+        btnLive.disabled = true;
+      }
+
+      const nameRole = document.getElementById('inpLeadName').value.split('—');
+      const customLead = {
+        leadName: (nameRole[0] || '').trim(),
+        leadRole: (nameRole[1] || 'Executive').trim(),
+        company: document.getElementById('inpCompany').value.trim(),
+        dealValueUSD: Number(document.getElementById('inpDealValue').value || 24000),
+        email: document.getElementById('inpEmail').value.trim(),
+        incomingMessage: document.getElementById('inpMessage').value.trim(),
+      };
+
+      currentOverrides.proposedDiscountPct = Number(document.getElementById('rngDiscount').value || 0);
+      currentOverrides.proposedTerms = document.getElementById('selTerms').value;
+
+      try {
+        const res = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            scenarioId: currentScenarioId,
+            customLead,
+            overrides: currentOverrides,
+            isCounterfactual,
+            liveAi,
+          }),
+        });
+        const data = await res.json();
+        lastEvaluation = data;
+        renderEvaluation(data);
+        refreshLedgerSummary();
+      } finally {
+        if (liveAi && btnLive) {
+          btnLive.textContent = '🧠 Deep Synthesis with Live AI (muse-spark-1.3)';
+          btnLive.disabled = false;
+        }
+      }
+    }
+
+    function renderEvaluation(data) {
+      const s = scenariosCatalog.find((item) => item.id === data.scenarioId) || scenariosCatalog[0];
+
+      // Claims list
+      const claimsEl = document.getElementById('claimsList');
+      const hasConflicts = (data.conflicts || []).length > 0;
+      claimsEl.innerHTML = (s.leadClaims || [])
+        .map((c) => {
+          const isCleared = !hasConflicts || c.status === 'verified';
+          const badgeHtml = isCleared
+            ? `<span class="pill tone-success">✅ Verified ${c.ref ? `[${c.ref}]` : ''}</span>`
+            : `<span class="pill tone-danger">❌ Contradicted [${c.ref || 'SRC-2'}]</span>`;
+          return `
+            <div class="claim-item">
+              <div><strong>${c.label}:</strong> <span style="color:var(--text-muted);">${c.claimedValue}</span></div>
+              <div onclick="highlightSource('${c.ref || 'SRC-2'}')" style="cursor:pointer;">${badgeHtml}</div>
+            </div>
+          `;
+        })
+        .join('');
+
+      document.getElementById('naiveTrapBox').innerHTML = `<strong>Why Naive AI Agents Fail Here:</strong> ${data.lead.naiveLlmTrap}`;
+
+      // MSA cap badge
+      const maxDisc = data.dealDeskEconomics?.maxAllowedDiscountPct ?? 10;
+      document.getElementById('lblMsaCap').innerHTML = `MSA Max Cap: ${maxDisc}% <span class="src-badge" onclick="highlightSource('SRC-5')">[SRC-5]</span>`;
+
+      // Counterfactual toggles
+      const cfContainer = document.getElementById('counterfactualList');
+      cfContainer.innerHTML = (data.counterfactualControls || [])
+        .map((ctrl) => {
+          return `
+            <label class="cf-toggle ${ctrl.active ? 'active' : ''}">
+              <div style="display:flex; gap:0.6rem; align-items:flex-start;">
+                <input type="checkbox" ${ctrl.active ? 'checked' : ''} onchange="toggleCounterfactualKey('${ctrl.key}')" />
+                <div>
+                  <div style="font-size:0.82rem; font-weight:700;">${ctrl.label} ${formatCitationBadges(ctrl.sourceBadge)}</div>
+                  <div style="font-size:0.74rem; color:var(--text-muted);">${ctrl.description}</div>
+                </div>
+              </div>
+              <span class="pill ${ctrl.active ? 'tone-success' : ''}" style="white-space:nowrap;">${ctrl.impactDelta}</span>
+            </label>
+          `;
+        })
+        .join('');
+
+      // Verdict Banner
+      const banner = document.getElementById('verdictBanner');
+      banner.className = 'verdict-banner ' + (data.decision.verdictTone || 'warning');
+      document.getElementById('verdictLabel').textContent = data.decision.verdictLabel;
+      document.getElementById('whatWouldChangeText').innerHTML = formatCitationBadges(data.decision.whatWouldChangeMyMind);
+      document.getElementById('scoreVal').textContent = data.decision.score;
+      document.getElementById('confidenceVal').textContent = data.decision.confidencePct + '% conf';
+      document.getElementById('evalMetaBadge').textContent = `${data.zetarisTelemetry.queryId} · ${data.zetarisTelemetry.latencyMs}ms · 0 Bytes Moved`;
+
+      // Deal Economics
+      const econ = data.dealDeskEconomics || {};
+      document.getElementById('econNetArr').textContent = '$' + Number(econ.netContractValueUSD || 0).toLocaleString();
+      document.getElementById('econProtected').textContent = '$' + Number(econ.marginProtectedUSD || 0).toLocaleString();
+      document.getElementById('econGrossMargin').textContent = (econ.grossMarginPct || 80) + '%';
+      document.getElementById('econWinProb').textContent = (econ.winProbabilityPct || 50) + '%';
+
+      // Conflicts Box
+      const conflictEl = document.getElementById('conflictContainer');
+      if (data.conflicts && data.conflicts.length > 0) {
+        conflictEl.style.display = 'block';
+        conflictEl.innerHTML =
+          `<div style="font-weight:800; font-size:0.84rem; color:var(--danger); margin-bottom:0.35rem;">🚨 ${data.conflicts.length} Cross-Silo Conflict(s) Caught by Zetaris Federated Join:</div>` +
+          data.conflicts
+            .map(
+              (c) => `
+              <div class="conflict-item">
+                <div><strong>[${c.severity}] ${c.conflictId}:</strong> ${c.claimInMessage}</div>
+                <div style="margin-top:0.15rem;">↳ <strong>Federated Proof:</strong> ${formatCitationBadges(c.federatedFact)} <span style="color:var(--danger); font-weight:700;">(${c.scorePenalty} pts)</span></div>
+              </div>
+            `
+            )
+            .join('');
+      } else {
+        conflictEl.style.display = 'block';
+        conflictEl.style.background = 'var(--success-soft)';
+        conflictEl.style.borderColor = 'var(--success-border)';
+        conflictEl.innerHTML = `<div style="font-weight:800; font-size:0.84rem; color:var(--success);">✅ Zero Cross-Silo Conflicts — All 5 Zetaris Federated Silos Match Prospect Claims!</div>`;
+      }
+
+      // Proof Tree
+      const proofEl = document.getElementById('proofTreeList');
+      proofEl.innerHTML = (data.proofTree || [])
+        .map((node) => {
+          const pct = Math.round((node.pointsEarned / node.maxPoints) * 100);
+          const barColor = pct >= 80 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : 'var(--danger)';
+          const badges = (node.citations || []).map((id) => `<span class="src-badge" onclick="highlightSource('${id}')">[${id}]</span>`).join('');
+          return `
+            <div class="proof-node">
+              <div class="proof-node-top">
+                <span>${node.pillar} ${badges}</span>
+                <span>${node.pointsEarned} / ${node.maxPoints} pts (${node.status})</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width:${pct}%; background:${barColor};"></div>
+              </div>
+              <div style="font-size:0.79rem; color:var(--text-secondary);">${formatCitationBadges(node.evidenceSummary)}</div>
+            </div>
+          `;
+        })
+        .join('');
+
+      // Action & Outreach Draft
+      const aiPrefix = data.liveAiTelemetry?.invoked
+        ? `<span class="pill tone-success" style="margin-right:0.4rem;">⚡ Live ${data.liveAiTelemetry.model} (${data.liveAiTelemetry.latencyMs}ms)</span>`
+        : '';
+      document.getElementById('recommendedActionText').innerHTML = aiPrefix + formatCitationBadges(data.decision.recommendedAction);
+      document.getElementById('draftChannel').textContent = data.decision.outreachDraft.channel;
+      document.getElementById('draftSubject').textContent = 'Subject: ' + data.decision.outreachDraft.subject;
+      document.getElementById('draftBody').innerHTML = formatCitationBadges(data.decision.outreachDraft.body);
+
+      // Zetaris SQL & Source Cards
+      document.getElementById('sqlEditor').value = data.zetarisTelemetry.sql;
+      renderZetarisSources(data.citations || []);
+
+      // Meterless Contract & H-MEM
+      document.getElementById('meterlessModePill').textContent = `Contract v4 · ${data.meterlessTelemetry.scoutContract.modelProfile.routingMode}`;
+      document.getElementById('scoutContractBox').textContent = JSON.stringify(data.meterlessTelemetry.scoutContract, null, 2);
+      renderHmemMemories(data.meterlessTelemetry.hmemRecall?.memories || []);
+    }
+
+    function renderZetarisSources(citations) {
+      const container = document.getElementById('zetarisSourcesList');
+      container.innerHTML = citations
+        .map(
+          (c) => `
+          <div class="source-card" id="source-card-${c.id}">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <div>
+                <span class="src-badge">[${c.id}]</span>
+                <strong style="font-size:0.83rem;">${c.table}</strong>
+                <span style="font-size:0.74rem; color:var(--text-muted);">(${c.engine})</span>
+              </div>
+              <span style="font-family:monospace; font-size:0.71rem; color:var(--text-muted);">${c.rowHash} · ${c.latencyMs}ms</span>
+            </div>
+            <div style="font-size:0.79rem; margin-top:0.35rem; color:var(--text-secondary);">${c.summary}</div>
+            <details style="margin-top:0.35rem; font-size:0.74rem;">
+              <summary style="cursor:pointer; color:var(--primary); font-weight:600;">Inspect In-Situ Row JSON &amp; CLS Masking (${c.pushdownPredicate})</summary>
+              <pre class="code-block" style="margin-top:0.35rem; padding:0.55rem;">${JSON.stringify(c.row, null, 2)}</pre>
+            </details>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    function renderHmemMemories(memories) {
+      const container = document.getElementById('hmemMemoriesList');
+      container.innerHTML = memories
+        .map(
+          (m) => `
+          <div class="memory-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <div>
+                <strong style="color:var(--primary);">${m.id}</strong>
+                <span class="pill" style="font-size:0.68rem;">${m.layer} · ${m.domain}</span>
+              </div>
+              <span style="font-family:monospace; font-size:0.73rem; font-weight:700;">Score: ${m.retrievalBreakdown.finalScore} (Conf: ${m.confidence})</span>
+            </div>
+            <div style="margin:0.35rem 0; color:var(--text-main);">${m.content}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-top:0.4rem;">
+              <span style="font-size:0.71rem; color:var(--text-muted);">Provenance: ${m.provenance?.label || m.source}</span>
+              <div style="display:flex; gap:0.35rem;">
+                <button class="btn" style="padding:0.15rem 0.45rem; font-size:0.71rem;" onclick="sendMemoryFeedback('${m.id}', 'helpful')">👍 Helpful (+0.05)</button>
+                <button class="btn" style="padding:0.15rem 0.45rem; font-size:0.71rem;" onclick="sendMemoryFeedback('${m.id}', 'not_helpful')">👎 Not Helpful (-0.03)</button>
+                <button class="btn" style="padding:0.15rem 0.45rem; font-size:0.71rem;" onclick="sendMemoryFeedback('${m.id}', 'wrong')">⚠️ Wrong (-0.20)</button>
+              </div>
+            </div>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    async function sendMemoryFeedback(memoryId, rating) {
+      await fetch('/api/meterless/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memoryId, rating }),
+      });
+      await runEvaluation(true, false);
+    }
+
+    async function executeCustomZetarisSql(tryForbiddenUpdate = false) {
+      const editor = document.getElementById('sqlEditor');
+      if (tryForbiddenUpdate) {
+        editor.value = `UPDATE zetaris_billing.stripe_subscriptions SET past_due_usd = 0 WHERE subscription_id = 'sub_1P9xApex882';`;
+      }
+      const res = await fetch('/api/zetaris/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scenarioId: currentScenarioId,
+          sql: editor.value,
+        }),
+      });
+      const data = await res.json();
+      const banner = document.getElementById('sqlStatusBanner');
+      banner.style.display = 'block';
+      if (!data.ok) {
+        banner.style.background = 'var(--danger-soft)';
+        banner.style.border = '1px solid var(--danger-border)';
+        banner.style.color = 'var(--danger)';
+        banner.innerHTML = `<strong>🛡️ ${data.status}:</strong> ${data.error} (Blocked Keyword: <code>${data.blockedKeyword}</code> · Logged in Zetaris Audit Trail <code>${data.auditEntry.auditId}</code>)`;
+      } else {
+        banner.style.background = 'var(--success-soft)';
+        banner.style.border = '1px solid var(--success-border)';
+        banner.style.color = 'var(--success)';
+        banner.innerHTML = `<strong>✅ ${data.status}:</strong> Returned ${data.rowsReturned} federated rows in ${data.latencyMs}ms with Zero Data Movement (Audit ID: <code>${data.auditEntry.auditId}</code>).`;
+      }
+    }
+
+    async function askPresetQuestion(q) {
+      document.getElementById('inpAskQuestion').value = q;
+      await submitForensicQuestion();
+    }
+
+    async function submitForensicQuestion() {
+      const q = document.getElementById('inpAskQuestion').value.trim();
+      const box = document.getElementById('askAnswerBox');
+      box.style.display = 'block';
+      box.innerHTML = '⏳ Querying Zetaris 5-silo evidence & synthesizing live forensic explanation...';
+
+      const res = await fetch('/api/forensic-ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scenarioId: currentScenarioId,
+          question: q,
+          overrides: currentOverrides,
+        }),
+      });
+      const data = await res.json();
+      box.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem; font-size:0.74rem; color:var(--text-muted);">
+          <strong>Engine: ${data.mode} (${data.latencyMs}ms)</strong>
+          <span>Citations Verified: ${(data.citationsUsed || []).join(' ')}</span>
+        </div>
+        <div>${formatCitationBadges(data.answer)}</div>
+      `;
+    }
+
+    async function refreshLedgerSummary() {
+      const res = await fetch('/api/meterless/ledger');
+      const data = await res.json();
+      const sum = data.summary || {};
+
+      document.getElementById('kpiMarginProtected').textContent = '$' + Number(sum.totalMarginProtectedUSD || 28200).toLocaleString() + ' USD';
+      document.getElementById('kpiBlocked').textContent = (sum.hallucinationsBlocked || 1) + ' Caught';
+
+      const listEl = document.getElementById('meterlessLedgerList');
+      const events = sum.recentOutcomeEvents || [];
+      listEl.innerHTML = events
+        .map(
+          (e) => `
+          <div style="padding:0.45rem 0.6rem; border-bottom:1px solid var(--border-color); font-size:0.76rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
+            <div>
+              <strong>${e.company}</strong> → <code>${e.verdict}</code> (${e.score}/100)
+              <div style="color:var(--text-muted); font-size:0.71rem;">${e.eventId} · Mode: ${e.routingMode} · Outcomes: ${e.outcomes.join(', ')}</div>
+            </div>
+            <div style="text-align:right; white-space:nowrap;">
+              <strong style="color:var(--success);">+$${Number(e.metrics?.marginProtectedUSD || 0).toLocaleString()} saved</strong>
+              <div style="color:var(--text-muted); font-size:0.7rem;">Unit: $${e.metrics?.outcomeUnitChargeUSD}</div>
+            </div>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    function copyOutreachDraft() {
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
