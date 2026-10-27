@@ -7,6 +7,7 @@ const ROOT = path.join(__dirname, '..');
 
 const indexHtml = fs.readFileSync(path.join(ROOT, 'public/index.html'), 'utf8');
 const deckHtml = fs.readFileSync(path.join(ROOT, 'public/deck.html'), 'utf8');
+const videoHtml = fs.readFileSync(path.join(ROOT, 'public/video.html'), 'utf8');
 const deckPdfB64 = fs.readFileSync(path.join(ROOT, 'public/deck.pdf')).toString('base64');
 const screenshotAppB64 = fs.readFileSync(path.join(ROOT, 'public/screenshot-live-app.png')).toString('base64');
 
@@ -26,6 +27,7 @@ import crypto from 'node:crypto';
 
 const INDEX_HTML = ${JSON.stringify(indexHtml)};
 const DECK_HTML = ${JSON.stringify(deckHtml)};
+const VIDEO_HTML = ${JSON.stringify(videoHtml)};
 const DECK_PDF_B64 = ${JSON.stringify(deckPdfB64)};
 const SCREENSHOT_APP_B64 = ${JSON.stringify(screenshotAppB64)};
 
@@ -242,6 +244,13 @@ export default {
 
     if (pathname === '/' || pathname === '/index.html') {
       return new Response(INDEX_HTML, {
+        status: 200,
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' },
+      });
+    }
+
+    if (pathname === '/video' || pathname === '/video/' || pathname === '/demo-video') {
+      return new Response(VIDEO_HTML, {
         status: 200,
         headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' },
       });
