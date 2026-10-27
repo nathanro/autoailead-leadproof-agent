@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
   <title>LeadProof Agent — Autonomous Revenue Deal Desk & Explainable Forensic Verifier</title>
   <style>
     :root, [data-theme="light"] {
@@ -62,6 +63,22 @@
     }
 
     * { box-sizing: border-box; }
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    .split-grid > *, .sponsor-grid > *, .card, .code-block, pre, details, .outreach-box, .claim-item, .topbar-inner, .hero-strip {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: anywhere;
+    }
+    @media (max-width: 640px) {
+      .container { padding: 0.85rem 0.75rem 2rem; }
+      .topbar { padding: 0.6rem 0.75rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .card { padding: 0.9rem; }
+    }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
@@ -1029,6 +1046,8 @@
       allCards.forEach((c) => c.classList.remove('highlight'));
       const target = document.getElementById('source-card-' + srcId);
       if (target) {
+        const d = target.querySelector('details');
+        if (d) d.open = true;
         target.classList.add('highlight');
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
@@ -1135,7 +1154,19 @@
         incomingMessage: document.getElementById('inpMessage').value.trim(),
       };
 
-      currentOverrides.proposedDiscountPct = Number(document.getElementById('rngDiscount').value || 0);
+      if (isCounterfactual) {
+        currentOverrides.proposedDiscountPct = Number(document.getElementById('rngDiscount').value || 0);
+      } else {
+        const msgText = document.getElementById('inpMessage').value || '';
+        const dm = msgText.match(/(\d+)\s*%\s*(?:discount|off|multi-seat|reduction)/i) || msgText.match(/by\s+(\d+)\s*%/i);
+        if (dm) {
+          currentOverrides.proposedDiscountPct = Number(dm[1]);
+          document.getElementById('rngDiscount').value = Number(dm[1]);
+          document.getElementById('lblDiscountVal').textContent = dm[1] + '%';
+        } else {
+          currentOverrides.proposedDiscountPct = Number(document.getElementById('rngDiscount').value || 0);
+        }
+      }
       currentOverrides.proposedTerms = document.getElementById('selTerms').value;
 
       try {
@@ -1166,12 +1197,12 @@
     function renderEvaluation(data) {
       const s = scenariosCatalog.find((item) => item.id === data.scenarioId) || scenariosCatalog[0];
 
-      // Claims list
+      // Claims list (dynamically extracted from edited incomingMessage + Zetaris truth)
       const claimsEl = document.getElementById('claimsList');
-      const hasConflicts = (data.conflicts || []).length > 0;
-      claimsEl.innerHTML = (s.leadClaims || [])
+      const activeClaims = data.evaluatedClaims || s.leadClaims || [];
+      claimsEl.innerHTML = activeClaims
         .map((c) => {
-          const isCleared = !hasConflicts || c.status === 'verified';
+          const isCleared = c.status === 'verified';
           const badgeHtml = isCleared
             ? `<span class="pill tone-success">✅ Verified ${c.ref ? `[${c.ref}]` : ''}</span>`
             : `<span class="pill tone-danger">❌ Contradicted [${c.ref || 'SRC-2'}]</span>`;
@@ -1494,7 +1525,7 @@
     function speakCloserRebuttal() {
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
-      const text = document.getElementById('closerRebuttalText').innerText.replace(/^🗣️ AI Closer Pitch:s*/, '');
+      const text = document.getElementById('closerRebuttalText').innerText.replace(/^🗣️\s*AI Closer Pitch:\s*/i, '');
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
       utter.rate = 1.02;

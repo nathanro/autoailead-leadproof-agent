@@ -28,14 +28,14 @@
 
 - **One-Sentence Zetaris Demo Challenge Statement (Required for the $10,000 Zetaris Prize Pool):**  
   > **In one sentence, why did you think it was amazing?**  
-  > *“Combining Zetaris’s zero-ETL federated SQL with Meterless’s H-MEM and Scout execution contracts let our agent catch a $27,900 procurement bluff across 5 data silos in 39 milliseconds without moving a single byte of customer PII into an LLM prompt.”*
+  > *“Combining Zetaris’s zero-ETL federated SQL with Meterless’s H-MEM and Scout execution contracts let our agent catch a $27,900 procurement discount bluff ($22,940 net margin saved after enforcing the 8% MSA cap) across 5 data silos in 39 milliseconds without moving a single byte of customer PII into an LLM prompt.”*
 
 ---
 
 ## 2. Short & Long Project Descriptions
 
 ### Short Description (150 words)
-Standard AI sales and reception agents trust whatever a prospect types in chat—scoring a delinquent 3-seat trial 95/100 when they claim "50 active seats" to unlock Enterprise API keys, or panicking when Procurement threatens to churn and giving away a 45% discount ($27,900 margin loss) on an account whose engineers are at 98.4% capacity.
+Standard AI sales and reception agents trust whatever a prospect types in chat—scoring a delinquent 3-seat trial 95/100 when they claim "50 active seats" to unlock Enterprise API keys, or panicking when Procurement threatens to churn and giving away a 45% discount ($27,900 discount bluff → $22,940 net margin saved after enforcing the 8% MSA cap) on an account whose engineers are at 98.4% capacity.
 
 **LeadProof Agent** solves this for B2B Deal Desks and high-ticket local service businesses (dental implant clinics, commercial HVAC). Every incoming lead or renewal request triggers a governed **5-silo Zetaris Federated SQL join** (Snowflake CRM, PostgreSQL Stripe Billing, Intercom Support, S3/Iceberg PostHog Telemetry, and Oracle/Ironclad Legal MSA) plus **Meterless H-MEM & Scout Intent** contract verification. Every decision includes clickable `[SRC-1]`–`[SRC-5]` citations, cross-silo deception alerts, an interactive **"What Would Change My Mind?" Counterfactual Simulator**, live AI forensic interrogation (`muse-spark-1.3`), and a ready-to-send WhatsApp/Email reply draft.
 
@@ -70,4 +70,4 @@ We integrated **Meterless (`src/meterlessClient.js`)** across all three layers o
 - **0:42 – 1:05 | Interactive Counterfactual Simulator & Live AI Interrogation:**  
   *"Because LeadProof is built for Track 02—The Agent That Can Explain Why—every `[SRC-1]` to `[SRC-5]` badge is clickable, and our **Counterfactual Simulator** shows exactly what would change the agent's mind. Watch as I click **'✨ 1-Click Flip to Fast-Track'** or drag the discount slider down to 8%: the score jumps to 98/100 in real time and rewrites the WhatsApp/Email counter-offer! I can also click **'Ask Why'** to interrogate our live AI engine grounded in those 5 Zetaris rows."*
 - **1:05 – 1:30 | Meterless H-MEM + Scout Intent + Why Zetaris Was Amazing (40s Segment for $10k Challenge):**  
-  *"Under the hood, **Meterless Scout Intent** issues an HMAC-SHA256 signed execution contract before any query runs, while **Meterless H-MEM** ranks long-term policy invariants and adapts confidence live when I click 👍 Helpful (`+0.05`). Why did I think building with Zetaris was amazing? Because what usually takes weeks of brittle ETL pipelines across Stripe, HubSpot, PostHog, and Legal took one governed, read-only federated SQL layer with built-in Column-Level Security (`MASK_CLS`)—letting our agent catch a $27,900 buyer bluff in 39 milliseconds without moving a single byte of customer PII."*
+  *"Under the hood, **Meterless Scout Intent** issues an HMAC-SHA256 signed execution contract before any query runs, while **Meterless H-MEM** ranks long-term policy invariants and adapts confidence live when I click 👍 Helpful (`+0.05`). Why did I think building with Zetaris was amazing? Because what usually takes weeks of brittle ETL pipelines across Stripe, HubSpot, PostHog, and Legal took one governed, read-only federated SQL layer with built-in Column-Level Security (`MASK_CLS`)—letting our agent catch a $27,900 buyer bluff ($22,940 net margin saved after 8% MSA cap) in 39 milliseconds without moving a single byte of customer PII."*

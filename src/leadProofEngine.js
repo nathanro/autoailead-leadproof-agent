@@ -58,6 +58,22 @@ export class LeadProofEngine {
       legal_ironclad: legal,
     } = zetarisResult.federatedRows;
 
+    // Dynamic extraction from edited incomingMessage (seats, discount %, billing claims)
+    const seatMatch = leadMeta.incomingMessage.match(/(\d+)\s*(?:active\s*)?(?:pro\s*|enterprise\s*)?seats/i);
+    if (seatMatch) {
+      billing.claimedSeats = Number(seatMatch[1]);
+    }
+    const discMatch =
+      leadMeta.incomingMessage.match(/(\d+)\s*%\s*(?:discount|off|multi-seat|reduction)/i) ||
+      leadMeta.incomingMessage.match(/by\s+(\d+)\s*%/i);
+    if (discMatch) {
+      const parsedDisc = Number(discMatch[1]);
+      leadMeta.requestedDiscountPct = parsedDisc;
+      if (overrides.proposedDiscountPct === undefined) {
+        effectiveOverrides.proposedDiscountPct = parsedDisc;
+      }
+    }
+
     const proposedDiscountPct =
       effectiveOverrides.proposedDiscountPct !== undefined
         ? Number(effectiveOverrides.proposedDiscountPct)
@@ -426,8 +442,45 @@ export class LeadProofEngine {
       liveAiCostUSD: liveAiTelemetry.costUSD || 0,
     });
 
+    const msaCapVal = legal?.maxDiscountAllowedPct ?? 10;
+    const evaluatedClaims = (baseScenario.leadClaims || []).map((c) => {
+      const item = { ...c };
+      if (item.id === 'claim_seats') {
+        if (seatMatch) {
+          item.label = `Claims ${billing.claimedSeats} active Pro seats`;
+          item.claimedValue = `${billing.claimedSeats} Pro seats active`;
+        }
+        item.status =
+          billing.claimedSeats <= billing.activeSeats || effectiveOverrides.budgetVerified
+            ? 'verified'
+            : 'contradicted';
+      } else if (item.id === 'claim_billing') {
+        const claimsZeroOverdue =
+          /\$0\s*(?:past\s*due|overdue)|zero\s*billing|good\s*standing|paid\s*in\s*full|no\s*overdue/i.test(
+            leadMeta.incomingMessage
+          );
+        if (claimsZeroOverdue) {
+          item.claimedValue = '$0 past due claimed';
+        }
+        item.status = billing.pastDueUSD === 0 ? 'verified' : 'contradicted';
+      } else if (item.id === 'claim_authority' || item.id === 'claim_role') {
+        item.status = crm.decisionMakerVerified ? 'verified' : 'contradicted';
+      } else if (item.id === 'claim_discount') {
+        item.label = `Demands ${proposedDiscountPct}% discount`;
+        item.claimedValue = `${proposedDiscountPct}% off renewal`;
+        item.status = proposedDiscountPct <= msaCapVal ? 'verified' : 'contradicted';
+      } else if (item.id === 'claim_usage') {
+        const claimsLowUsage = /barely\s*touched|low\s*usage|flat\s*adoption/i.test(leadMeta.incomingMessage);
+        item.status = claimsLowUsage && intent.usageQuotaPct >= 80 ? 'contradicted' : 'verified';
+      } else if (item.id === 'claim_credit') {
+        item.status = billing.pastDueUSD === 0 && effectiveOverrides.budgetVerified ? 'verified' : 'contradicted';
+      }
+      return item;
+    });
+
     return {
       evaluationId: `eval_${Date.now().toString(36)}`,
+      evaluatedClaims,
       timestamp: new Date().toISOString(),
       scenarioId: baseScenario.id,
       isCounterfactual,
@@ -733,7 +786,7 @@ export class LeadProofEngine {
     };
 
     const preset = objectionPresets[objectionType] || objectionPresets.competitor_price;
-    const authorizedDiscountPct = Math.min(dealDeskEconomics.proposedDiscountPct, legal.maxDiscountAllowedPct || 8);
+    const authorizedDiscountPct = Math.min(dealDeskEconomics.proposedDiscountPct, (legal.maxDiscountAllowedPct ?? 8));
     const finalContractPriceUSD = Math.round(lead.dealValueUSD * (1 - authorizedDiscountPct / 100));
     const savingsUSD = lead.dealValueUSD - finalContractPriceUSD;
 

@@ -152,3 +152,60 @@ test('POST /api/closer/objection and POST /api/closer/checkout complete full-cyc
   assert.equal(payRes.payload.status, 'DEAL_CLOSED_AND_PAID');
   assert.ok(payRes.payload.meterlessReceipt.outcomes.includes('deal_closed_revenue'));
 });
+
+test('Dynamic claim extraction parses edited seat/discount claims and enforces 0% MSA floor on Apex Logistics', async () => {
+  const services = createCoreServices();
+
+  // 1. Verify 0% MSA floor on Apex Logistics closer quote (not 8%)
+  const apexCloser = await handleApiRequest({
+    method: 'POST',
+    pathname: '/api/closer/objection',
+    body: { scenarioId: 'trap-expansion-claim', objectionType: 'competitor_price' },
+    services,
+  });
+  assert.equal(apexCloser.status, 200);
+  assert.equal(apexCloser.payload.checkoutOffer.authorizedDiscountPct, 0);
+  assert.equal(apexCloser.payload.checkoutOffer.finalContractPriceUSD, 24000);
+
+  // 2. Editing message to "3 active Pro seats" clears CONF-SEAT-DECEPTION and marks claim_seats as verified
+  const threeSeatsRes = await handleApiRequest({
+    method: 'POST',
+    pathname: '/api/evaluate',
+    body: {
+      scenarioId: 'trap-expansion-claim',
+      customLead: {
+        incomingMessage: 'We have 3 active Pro seats on our sandbox and want to discuss upgrading.',
+      },
+    },
+    services,
+  });
+  assert.equal(threeSeatsRes.status, 200);
+  assert.equal(
+    threeSeatsRes.payload.conflicts.some((c) => c.conflictId === 'CONF-SEAT-DECEPTION'),
+    false
+  );
+  const seatClaim3 = threeSeatsRes.payload.evaluatedClaims.find((c) => c.id === 'claim_seats');
+  assert.equal(seatClaim3.status, 'verified');
+  assert.equal(seatClaim3.claimedValue, '3 Pro seats active');
+
+  // 3. Editing message to "200 active Pro seats" triggers CONF-SEAT-DECEPTION with 200 seats
+  const twoHundredSeatsRes = await handleApiRequest({
+    method: 'POST',
+    pathname: '/api/evaluate',
+    body: {
+      scenarioId: 'trap-expansion-claim',
+      customLead: {
+        incomingMessage: 'We already run 200 active Pro seats with zero billing issues and want a 25% discount.',
+      },
+    },
+    services,
+  });
+  assert.equal(twoHundredSeatsRes.status, 200);
+  const seatConflict = twoHundredSeatsRes.payload.conflicts.find((c) => c.conflictId === 'CONF-SEAT-DECEPTION');
+  assert.ok(seatConflict);
+  assert.ok(seatConflict.claimInMessage.includes('200'));
+  const seatClaim200 = twoHundredSeatsRes.payload.evaluatedClaims.find((c) => c.id === 'claim_seats');
+  assert.equal(seatClaim200.status, 'contradicted');
+  assert.equal(seatClaim200.claimedValue, '200 Pro seats active');
+  assert.equal(twoHundredSeatsRes.payload.dealDeskEconomics.proposedDiscountPct, 25);
+});

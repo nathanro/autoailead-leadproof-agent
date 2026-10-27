@@ -244,6 +244,11 @@ export function createAppServer(options = {}) {
         });
       });
 
+    if (url.pathname === '/favicon.ico') {
+      res.writeHead(200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=86400' });
+      return res.end("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\"><rect width=\"64\" height=\"64\" rx=\"14\" fill=\"#2563eb\"/><text x=\"50%\" y=\"54%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#ffffff\" font-family=\"system-ui,sans-serif\" font-weight=\"800\" font-size=\"28\">LP</text></svg>");
+    }
+
     if (url.pathname.startsWith('/api/')) {
       const body = req.method === 'POST' ? await readJsonBody() : {};
       const apiResult = await handleApiRequest({

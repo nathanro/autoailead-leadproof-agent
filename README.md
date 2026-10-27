@@ -19,7 +19,7 @@ Built for the **Open Agent Hackathon 2026 (GenAI Works · Oct 22–27, 2026 · T
 Standard AI sales and reception agents evaluate incoming leads using only the text inside the chat window or a single CRM contact row. Because the ground truth is fragmented across Billing, Support, Product Telemetry, and Legal contract vaults, naive agents fail in three costly ways:
 
 1. **Deception & Bad-Debt Traps ($28,200 Exposure):** A prospect claims *"We already run 50 active Pro seats with zero billing issues—unlock Enterprise API access before 5 PM today."* A prompt-only LLM sees "VP of Operations" and "50 seats" and scores it 95/100 (Auto-Provision), leaking production API keys to a 3-seat trial account that owes **$4,200 USD (47 days overdue)** and is actively rotating blocked webhook keys.
-2. **Procurement Discount Bluffs ($22,940 Margin Burn):** At renewal, a VP of Procurement threatens to churn unless given a **45% discount**, claiming *"our engineers barely touched the platform this quarter."* Without federated telemetry, an AI agent panics and recommends the discount—even when **33 active engineers are at 98.4% quota saturation** and the Master Service Agreement (MSA) caps discounts at **8%**.
+2. **Procurement Discount Bluffs ($27,900 Bluff / $22,940 Net Margin Saved):** At renewal, a VP of Procurement threatens to churn unless given a **45% discount**, claiming *"our engineers barely touched the platform this quarter."* Without federated telemetry, an AI agent panics and recommends the discount—even when **33 active engineers are at 98.4% quota saturation** and the Master Service Agreement (MSA) caps discounts at **8%**.
 3. **Zero Auditability ("Why 82/100?"):** When an AI outputs an opaque lead score without row-level citations or counterfactuals, RevOps teams and business owners cannot trust or automate high-stakes decisions.
 
 ---
@@ -34,7 +34,7 @@ Standard AI sales and reception agents evaluate incoming leads using only the te
 - **Live AI Forensic Interrogation (`muse-spark-1.3` + Zetaris Citations):** Judges can ask any free-form question in the *"Interrogate the Forensic Agent (Ask Why)"* box or click *"Deep Synthesis with Live AI"* to run live LLM synthesis grounded strictly in the 5-silo Zetaris result set.
 
 > **In One Sentence, Why We Thought Zetaris + Meterless Was Amazing:**  
-> *“Combining Zetaris’s zero-ETL federated SQL with Meterless’s H-MEM and Scout execution contracts let our agent catch a $27,900 procurement bluff across 5 data silos in 39 milliseconds without moving a single byte of customer PII into an LLM prompt.”*
+> *“Combining Zetaris’s zero-ETL federated SQL with Meterless’s H-MEM and Scout execution contracts let our agent catch a $27,900 procurement discount bluff ($22,940 net margin saved after enforcing the 8% MSA cap) across 5 data silos in 39 milliseconds without moving a single byte of customer PII into an LLM prompt.”*
 
 ---
 
@@ -91,7 +91,7 @@ cd autoailead-leadproof-agent
 # (Runs out-of-the-box with deterministic 5-silo Zetaris + Meterless engines)
 cp .env.example .env
 
-# Run the automated test suite (6/6 tests verifying Zetaris, Meterless H-MEM/Scout, and Counterfactuals)
+# Run the automated test suite (8/8 tests verifying Zetaris, Meterless H-MEM/Scout, and Counterfactuals)
 npm test
 
 # Start the local server on http://localhost:3090
