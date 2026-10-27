@@ -123,3 +123,32 @@ test('POST /api/meterless/feedback applies canonical H-MEM confidence deltas and
   assert.ok(fbRes.payload.newConfidence >= fbRes.payload.previousConfidence);
   assert.equal(fbRes.payload.auditEntry.action, 'feedback');
 });
+
+test('POST /api/closer/objection and POST /api/closer/checkout complete full-cycle objection rebuttal & payment close', async () => {
+  const services = createCoreServices();
+  const objRes = await handleApiRequest({
+    method: 'POST',
+    pathname: '/api/closer/objection',
+    body: { scenarioId: 'shadow-discount-bluff', objectionType: 'competitor_price' },
+    services,
+  });
+  assert.equal(objRes.status, 200);
+  assert.equal(objRes.payload.ok, true);
+  assert.ok(objRes.payload.checkoutOffer.finalContractPriceUSD > 0);
+
+  const payRes = await handleApiRequest({
+    method: 'POST',
+    pathname: '/api/closer/checkout',
+    body: {
+      scenarioId: 'shadow-discount-bluff',
+      quoteId: objRes.payload.quoteId,
+      amountPaidUSD: objRes.payload.checkoutOffer.dueTodayUSD,
+      finalContractPriceUSD: objRes.payload.checkoutOffer.finalContractPriceUSD,
+      company: 'Vanguard FinTech Holdings',
+    },
+    services,
+  });
+  assert.equal(payRes.status, 200);
+  assert.equal(payRes.payload.status, 'DEAL_CLOSED_AND_PAID');
+  assert.ok(payRes.payload.meterlessReceipt.outcomes.includes('deal_closed_revenue'));
+});

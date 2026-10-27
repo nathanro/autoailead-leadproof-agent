@@ -850,10 +850,77 @@
           </div>
         </div>
 
+        
+        <!-- LIVE OBJECTION & AUTONOMOUS CLOSING ARENA (FULL-CYCLE AI CLOSER) -->
+        <div class="card" id="closerArenaCard" style="border: 2px solid var(--primary); box-shadow: 0 8px 26px rgba(37, 99, 235, 0.12);">
+          <div class="card-header">
+            <h2 class="card-title">🤝 4. Live Objection &amp; Autonomous Closing Arena (Full-Cycle AI Closer)</h2>
+            <span class="pill tone-success" id="closerStatusPill">Inquiry → Objection Rebuttal → Instant Stripe Checkout</span>
+          </div>
+          <p style="margin:0 0 0.65rem; font-size:0.81rem; color:var(--text-secondary);">
+            Unlike simple appointment-setter bots that only book calendar links, <strong>LeadProof AI Closer</strong> handles live price, competitor, and timing objections using <strong>Zetaris 5-silo telemetry + legal margin floors</strong>, explains <em>WHY</em> it chose the rebuttal strategy, and closes the payment in real time:
+          </p>
+
+          <div class="field-label">1. Trigger a Real-World Buyer Objection (or type/speak your own below):</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; margin-bottom:0.65rem;">
+            <button class="btn" style="justify-content:flex-start; font-size:0.76rem; text-align:left;" onclick="triggerCloserObjection('competitor_price', false)">💸 "Too expensive — Competitor X quoted 40% less"</button>
+            <button class="btn" style="justify-content:flex-start; font-size:0.76rem; text-align:left;" onclick="triggerCloserObjection('no_time_migrate', false)">⏳ "We don't have time to migrate, call next quarter"</button>
+            <button class="btn" style="justify-content:flex-start; font-size:0.76rem; text-align:left;" onclick="triggerCloserObjection('prove_roi_volume', false)">🤔 "How do I know this will work for our volume?"</button>
+            <button class="btn" style="justify-content:flex-start; font-size:0.76rem; text-align:left;" onclick="triggerCloserObjection('net60_zero_upfront', false)">🧾 "Can we do Net-60 with $0 upfront?"</button>
+          </div>
+
+          <div style="display:flex; gap:0.45rem; margin-bottom:0.8rem; flex-wrap:wrap;">
+            <input id="inpCustomObjection" class="input" style="flex:1; min-width:220px;" type="text" placeholder="Or type any custom buyer objection (e.g., 'Your setup fee is too high')..." />
+            <button class="btn btn-primary" onclick="triggerCloserObjection('competitor_price', false, true)">⚡ Counter &amp; Quote</button>
+            <button class="btn btn-success" id="btnLiveAiCloser" onclick="triggerCloserObjection('competitor_price', true, true)">🧠 Live AI Closer (muse-spark-1.3)</button>
+          </div>
+
+          <!-- Rebuttal & Instant Checkout Container -->
+          <div id="closerOutputContainer" style="display:none; border-top:1px solid var(--border-color); padding-top:0.85rem;">
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-strong); border-radius:10px; padding:0.75rem 0.9rem; margin-bottom:0.75rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.3rem;">
+                <span style="font-size:0.73rem; font-weight:800; text-transform:uppercase; color:var(--primary);" id="closerStrategyTitle">STRATEGY: TELEMETRY-ANCHORED VALUE DEFENSE</span>
+                <button class="btn" style="padding:0.2rem 0.55rem; font-size:0.72rem;" onclick="speakCloserRebuttal()">🔊 Speak AI Closer Pitch</button>
+              </div>
+              <div style="font-size:0.79rem; color:var(--text-secondary); margin-bottom:0.45rem;" id="closerWhyText"></div>
+              <div style="background:var(--bg-surface); border-left:4px solid var(--primary); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.83rem; font-weight:600;" id="closerRebuttalText"></div>
+            </div>
+
+            <!-- Interactive Stripe / Deposit Instant Checkout Card -->
+            <div id="instantCheckoutCard" style="background:var(--bg-elevated); border:2px solid var(--primary); border-radius:12px; padding:0.9rem 1.05rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.55rem;">
+                <div>
+                  <span class="pill pill-track" id="checkoutQuoteBadge">INSTANT STRIPE DEAL CHECKOUT · qt_...</span>
+                  <div style="font-size:0.95rem; font-weight:800; margin-top:0.2rem;" id="checkoutItemTitle">Priority Activation Deposit &amp; Price Lock</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.72rem; color:var(--text-muted); text-decoration:line-through;" id="checkoutListPrice">$24,000 ARR</div>
+                  <div style="font-size:1.25rem; font-weight:900; color:var(--primary);" id="checkoutFinalPrice">$22,080 ARR</div>
+                </div>
+              </div>
+
+              <div style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:0.7rem;" id="checkoutBonusNote"></div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem; flex-wrap:wrap; border-top:1px dashed var(--border-strong); padding-top:0.65rem;">
+                <div>
+                  <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:var(--text-muted);">Due Now to Lock Offer &amp; Provision</div>
+                  <div style="font-size:1.15rem; font-weight:900; color:var(--success);" id="checkoutDueToday">$1,500 USD</div>
+                </div>
+                <button id="btnPayCheckout" class="btn btn-success" style="font-size:0.86rem; padding:0.58rem 1.15rem; font-weight:800;" onclick="executeInstantCheckout()">
+                  💳 Pay Deposit &amp; Close Deal Now
+                </button>
+              </div>
+            </div>
+
+            <!-- Closed & Paid Confirmation Banner -->
+            <div id="dealClosedBanner" style="display:none; margin-top:0.75rem; background:var(--success-soft); border:2px solid var(--success-border); border-radius:12px; padding:0.85rem 1rem;"></div>
+          </div>
+        </div>
+
         <!-- Interactive "Interrogate the Agent ('Why?')" Live AI Box -->
         <div class="card">
           <div class="card-header">
-            <h2 class="card-title">💬 4. Interrogate the Forensic Agent ("Ask Why")</h2>
+            <h2 class="card-title">💬 5. Interrogate the Forensic Agent ("Ask Why")</h2>
             <span class="pill pill-track" id="askAiModeBadge">Live AI (`muse-spark-1.3`) + Zetaris Citations</span>
           </div>
           <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.6rem;">
@@ -1086,6 +1153,7 @@
         const data = await res.json();
         lastEvaluation = data;
         renderEvaluation(data);
+        if (!isCounterfactual) triggerCloserObjection('competitor_price', false, false);
         refreshLedgerSummary();
       } finally {
         if (liveAi && btnLive) {
@@ -1368,6 +1436,256 @@
         `
         )
         .join('');
+    }
+
+
+    let currentCloserQuote = null;
+
+    async function triggerCloserObjection(objectionType = 'competitor_price', liveAi = false, useCustomInput = false) {
+      const customObjection = useCustomInput ? document.getElementById('inpCustomObjection').value.trim() : '';
+      const btnAi = document.getElementById('btnLiveAiCloser');
+      if (liveAi && btnAi) {
+        btnAi.textContent = '⏳ Synthesizing Closer Pitch...';
+        btnAi.disabled = true;
+      }
+      try {
+        const res = await fetch('/api/closer/objection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            scenarioId: currentScenarioId,
+            objectionType,
+            customObjection,
+            overrides: currentOverrides,
+            liveAi,
+          }),
+        });
+        const data = await res.json();
+        currentCloserQuote = data.checkoutOffer;
+        const container = document.getElementById('closerOutputContainer');
+        container.style.display = 'block';
+        document.getElementById('dealClosedBanner').style.display = 'none';
+
+        const aiTag = data.liveAiUsed ? ' · ⚡ Live muse-spark-1.3' : ' · ⚡ 5-Silo Grounded';
+        document.getElementById('closerStrategyTitle').textContent = 'STRATEGY: ' + data.strategyName + aiTag;
+        document.getElementById('closerWhyText').innerHTML = '<strong>Why This Rebuttal Strategy Was Chosen:</strong> ' + formatCitationBadges(data.whyExplanation);
+        document.getElementById('closerRebuttalText').innerHTML = '🗣️ <strong>AI Closer Pitch:</strong> "' + formatCitationBadges(data.rebuttalSpeech) + '"';
+
+        const offer = data.checkoutOffer;
+        document.getElementById('checkoutQuoteBadge').textContent = 'INSTANT STRIPE DEAL CHECKOUT · ' + offer.quoteId + ' · Terms: ' + offer.paymentTerms;
+        document.getElementById('checkoutItemTitle').textContent = offer.checkoutItemLabel;
+        document.getElementById('checkoutListPrice').textContent = 'List: 
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ + Number(offer.listPriceUSD).toLocaleString() + ' (' + offer.authorizedDiscountPct + '% Authorized Incentive)';
+        document.getElementById('checkoutFinalPrice').textContent = '
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ + Number(offer.finalContractPriceUSD).toLocaleString() + ' Net Contract';
+        document.getElementById('checkoutBonusNote').innerHTML = '🎁 <strong>Included Fast-Action Bonus:</strong> ' + offer.bonusIncluded + ' · <strong>MSA Ref:</strong> <code>' + offer.contractRef + '</code>';
+        document.getElementById('checkoutDueToday').textContent = '
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ + Number(offer.dueTodayUSD).toLocaleString() + ' USD';
+
+        const payBtn = document.getElementById('btnPayCheckout');
+        payBtn.disabled = false;
+        payBtn.textContent = '💳 Pay 
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ + Number(offer.dueTodayUSD).toLocaleString() + ' Deposit & Lock Offer Now';
+      } finally {
+        if (liveAi && btnAi) {
+          btnAi.textContent = '🧠 Live AI Closer (muse-spark-1.3)';
+          btnAi.disabled = false;
+        }
+      }
+    }
+
+    function speakCloserRebuttal() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('closerRebuttalText').innerText.replace(/^🗣️ AI Closer Pitch:s*/, '');
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    async function executeInstantCheckout() {
+      if (!currentCloserQuote) return;
+      const payBtn = document.getElementById('btnPayCheckout');
+      payBtn.disabled = true;
+      payBtn.textContent = '⏳ Processing Instant Checkout...';
+
+      const res = await fetch('/api/closer/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scenarioId: currentScenarioId,
+          quoteId: currentCloserQuote.quoteId,
+          amountPaidUSD: currentCloserQuote.dueTodayUSD,
+          finalContractPriceUSD: currentCloserQuote.finalContractPriceUSD,
+          company: currentCloserQuote.company,
+        }),
+      });
+      const data = await res.json();
+      payBtn.textContent = '✅ DEAL CLOSED & PAID (
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ + Number(data.amountPaidUSD).toLocaleString() + ')';
+      document.getElementById('closerStatusPill').textContent = '✅ DEAL CLOSED & PAID · ' + data.receiptId;
+
+      const closedBanner = document.getElementById('dealClosedBanner');
+      closedBanner.style.display = 'block';
+      closedBanner.innerHTML =
+        '<div style="font-weight:900; font-size:0.92rem; color:var(--success); margin-bottom:0.25rem;">🎉 ' +
+        data.status +
+        ': 
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ +
+        Number(data.amountPaidUSD).toLocaleString() +
+        ' USD Collected · Contract Locked (
+      const text = document.getElementById('draftBody').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Evidence-backed reply draft copied to clipboard!');
+    }
+
+    function speakOutreachDraft() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('draftBody').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
+      utter.rate = 1.02;
+      window.speechSynthesis.speak(utter);
+    }
+
+    initTheme();
+    loadScenarios();
+  </script>
+</body>
+</html>
+ +
+        Number(data.finalContractPriceUSD).toLocaleString() +
+        ')</div>' +
+        '<div style="font-size:0.8rem; color:var(--text-main); margin-bottom:0.25rem;">' +
+        data.whatsappOwnerAlert +
+        '</div>' +
+        '<div style="font-size:0.74rem; color:var(--text-muted);">Meterless Outcome Logged: <code>deal_closed_revenue</code> + <code>instant_checkout_paid</code> (Event ID: <code>' +
+        data.meterlessReceipt.eventId +
+        '</code>)</div>';
+
+      await flipToFastTrack();
     }
 
     function copyOutreachDraft() {

@@ -685,4 +685,199 @@ export class LeadProofEngine {
       },
     };
   }
+
+  async handleObjectionAndQuote({
+    scenarioId = 'trap-expansion-claim',
+    objectionType = 'competitor_price',
+    customObjection = '',
+    overrides = {},
+    liveAi = false,
+  } = {}) {
+    const evalState = await this.evaluateLead({ scenarioId, overrides, isCounterfactual: false, liveAi: false });
+    const { lead, citations, dealDeskEconomics, decision } = evalState;
+    const { crm_hubspot: crm, billing_stripe: billing, support_intercom: support, web_posthog: intent, legal_ironclad: legal } =
+      (await this.zetaris.queryLeadContext({ scenarioId, overrides })).federatedRows;
+
+    const objectionPresets = {
+      competitor_price: {
+        label: '💸 "Too expensive — Competitor X quoted me 40% less"',
+        buyerObjection: customObjection || `Competitor X just quoted us 40% less than your $${lead.dealValueUSD.toLocaleString()} price. Match their 40% discount or we walk.`,
+        strategyName: 'Telemetry-Anchored Value Defense + Authorized Fast-Close Incentive',
+        whyExplanation: `Zetaris cross-silo proof shows [SRC-4] (${intent.table}) at ${intent.usageQuotaPct}% active usage saturation and [SRC-5] (${legal.table} #${legal.contractId}) caps maximum discount at ${legal.maxDiscountAllowedPct}%. In H-MEM win/loss memory, 3 peer accounts in ${lead.vertical} churned from low-cost Competitor X within 60 days due to missing Zero-ETL governance and SLA downtime. We hold the ${legal.maxDiscountAllowedPct}% MSA floor and attach a waived onboarding/implementation bonus when settled via instant deposit today.`,
+        citationsUsed: ['[SRC-4]', '[SRC-5]', '[SRC-2]'],
+      },
+      no_time_migrate: {
+        label: '⏳ "We don\'t have time to migrate right now, call me next quarter"',
+        buyerObjection: customObjection || 'Our team is swamped right now and we do not have bandwidth to onboard or migrate until next quarter.',
+        strategyName: 'Zero-ETL Turnkey Activation + Price-Freeze Deposit Lock',
+        whyExplanation: `[SRC-4] (${intent.table}) proves ${intent.activeEngineersCount || 4} users/workflows are already active in-situ, and [SRC-3] (${support.table} #${support.ticketId}) confirms turnkey readiness. Waiting until next quarter forfeits current tier pricing and leaves the active issue unresolved. Offering a 1-click deposit locks current pricing with zero engineering lift.`,
+        citationsUsed: ['[SRC-3]', '[SRC-4]', '[SRC-1]'],
+      },
+      prove_roi_volume: {
+        label: '🤔 "How do I know this will actually work for our volume?"',
+        buyerObjection: customObjection || 'How can we be sure this will handle our real production volume and deliver ROI before committing?',
+        strategyName: 'Live Production Telemetry Proof + SLA Performance Guarantee',
+        whyExplanation: `[SRC-4] (${intent.table}) already recorded an intent/usage score of ${intent.intentScore}/100 (${intent.anomalyFlag}), and [SRC-3] shows CSAT ${support.csatScore}/5.0. We attach a contractual 99.95% SLA performance guarantee under [SRC-5] (#${legal.contractId}) so the buyer has zero downside risk.`,
+        citationsUsed: ['[SRC-4]', '[SRC-3]', '[SRC-5]'],
+      },
+      net60_zero_upfront: {
+        label: '🧾 "Can we do Net-60 with $0 upfront?"',
+        buyerObjection: customObjection || 'We need Net-60 invoice terms with $0 upfront deposit to move forward today.',
+        strategyName: billing.pastDueUSD > 0 ? 'Delinquency Settlement Gate + Instant Card Unlock' : 'Split Deposit / Fast-Action Rebate Counter-Offer',
+        whyExplanation:
+          billing.pastDueUSD > 0
+            ? `[SRC-2] (${billing.table}) flags $${billing.pastDueUSD.toLocaleString()} overdue (${billing.daysOverdue} days) on Invoice #${billing.invoiceId}, and [SRC-5] (#${legal.contractId}) strictly suspends Net-60 credit until the overdue balance is cleared. Counter-offering instant card settlement of #${billing.invoiceId} immediately unlocks provisioning.`
+            : `[SRC-5] (#${legal.contractId}) sets standard terms to ${legal.allowedPaymentTerms} with a ${legal.maxDiscountAllowedPct}% discount ceiling. By collecting an instant reservation deposit today, we unlock priority provisioning while protecting 100% of gross margin.`,
+        citationsUsed: ['[SRC-2]', '[SRC-5]', '[SRC-1]'],
+      },
+    };
+
+    const preset = objectionPresets[objectionType] || objectionPresets.competitor_price;
+    const authorizedDiscountPct = Math.min(dealDeskEconomics.proposedDiscountPct, legal.maxDiscountAllowedPct || 8);
+    const finalContractPriceUSD = Math.round(lead.dealValueUSD * (1 - authorizedDiscountPct / 100));
+    const savingsUSD = lead.dealValueUSD - finalContractPriceUSD;
+
+    // Compute instant checkout deposit or settlement amount
+    let dueTodayUSD = Math.min(2500, Math.max(249, Math.round(finalContractPriceUSD * 0.15)));
+    let checkoutItemLabel = `Priority Activation Deposit & Price Lock (${lead.company})`;
+    if (billing.pastDueUSD > 0) {
+      dueTodayUSD = billing.pastDueUSD + Math.round(finalContractPriceUSD * 0.25);
+      checkoutItemLabel = `Past-Due Invoice #${billing.invoiceId} ($${billing.pastDueUSD.toLocaleString()}) + 25% Enterprise Activation`;
+    } else if (scenarioId === 'smile-dental-implant') {
+      dueTodayUSD = 49;
+      checkoutItemLabel = `Priority Thursday 11:00 AM Surgical Chair Lock (CBCT #SCAN-309 Fee Waived — $250 Saved)`;
+    } else if (scenarioId === 'lone-star-hvac-commercial') {
+      dueTodayUSD = 249;
+      checkoutItemLabel = `Emergency Crew #4 Diagnostic Dispatch Today 2:30 PM + Hold 2x 10-Ton Carrier Units`;
+    }
+
+    let rebuttalSpeech = `I hear you, ${lead.leadName.split(' ')[0]}. Here is what our live data shows: per ${preset.citationsUsed.join(' and ')}, ${preset.whyExplanation} Instead of an unapproved discount that breaks your SLA, I have unlocked our authorized ${authorizedDiscountPct}% margin-safe offer at $${finalContractPriceUSD.toLocaleString()} (${legal.allowedPaymentTerms}) and waived the onboarding fee. You can lock this in right now with the $${dueTodayUSD.toLocaleString()} instant checkout below.`;
+
+    let liveAiUsed = false;
+    const apiKey = this.getMetaApiKey();
+    if (liveAi && apiKey && this.liveAiSpendUSD < 5.0) {
+      try {
+        const resp = await fetch('https://api.meta.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'muse-spark-1.3',
+            temperature: 0.25,
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are LeadProof Autonomous AI Sales Closer (Track 02: The Agent That Can Explain Why). Write a persuasive, high-converting 3-sentence closer rebuttal to the buyer objection. Explicitly cite Zetaris sources ([SRC-1] to [SRC-5]), defend the margin floor, and invite the buyer to click the Instant Checkout button right now.',
+              },
+              {
+                role: 'user',
+                content: `Prospect: ${lead.leadName} at ${lead.company} ($${lead.dealValueUSD})\nBuyer Objection: "${preset.buyerObjection}"\nForensic Strategy: ${preset.whyExplanation}\nAuthorized Final Price: $${finalContractPriceUSD.toLocaleString()} (${authorizedDiscountPct}% discount) | Due Today to Lock: $${dueTodayUSD.toLocaleString()} (${checkoutItemLabel})`,
+              },
+            ],
+          }),
+        });
+        if (resp.ok) {
+          const d = await resp.json();
+          const content = (d.choices?.[0]?.message?.content || '').trim();
+          if (content) {
+            rebuttalSpeech = content;
+            liveAiUsed = true;
+            this.liveAiCallsCount += 1;
+          }
+        }
+      } catch (_) {}
+    }
+
+    const quoteId = `qt_${Date.now().toString(36)}`;
+    this.meterless._recordTrustAudit(
+      'mem-vanguard-bluff',
+      'read',
+      'service:AutonomousCloserEngine',
+      { objectionType },
+      { quoteId, finalContractPriceUSD, dueTodayUSD },
+      { scenarioId }
+    );
+
+    return {
+      ok: true,
+      quoteId,
+      scenarioId,
+      objectionType,
+      objectionLabel: preset.label,
+      buyerObjection: preset.buyerObjection,
+      strategyName: preset.strategyName,
+      whyExplanation: preset.whyExplanation,
+      citationsUsed: preset.citationsUsed,
+      rebuttalSpeech,
+      liveAiUsed,
+      checkoutOffer: {
+        quoteId,
+        company: lead.company,
+        recipient: `${lead.leadName} <${lead.email}>`,
+        listPriceUSD: lead.dealValueUSD,
+        authorizedDiscountPct,
+        savingsUSD,
+        finalContractPriceUSD,
+        dueTodayUSD,
+        checkoutItemLabel,
+        paymentTerms: legal.allowedPaymentTerms,
+        contractRef: legal.contractId,
+        bonusIncluded:
+          scenarioId === 'smile-dental-implant'
+            ? 'Waived $250 3D CBCT Scan Fee (#SCAN-309 Verified)'
+            : scenarioId === 'lone-star-hvac-commercial'
+            ? 'Priority 2:30 PM Crew #4 Dispatch + $249 Credited Toward RTU Swap'
+            : 'Complimentary 200 req/sec Webhook Bursting + Priority SLA',
+        status: 'READY_TO_CLOSE',
+      },
+    };
+  }
+
+  async closeDealCheckout({
+    scenarioId = 'trap-expansion-claim',
+    quoteId = 'qt_live',
+    amountPaidUSD = 1500,
+    finalContractPriceUSD = 24000,
+    company = 'Apex Logistics Corp',
+  } = {}) {
+    const receiptId = `chk_paid_${Date.now().toString(36)}`;
+    const ledgerEntry = this.meterless.recordOutcomeEvent({
+      scenarioId,
+      company,
+      verdict: 'DEAL_CLOSED_AND_PAID',
+      score: 99,
+      confidencePct: 99,
+      hallucinationBlocked: false,
+      counterfactualRun: false,
+      latencyMs: 31,
+      zetarisRows: 5,
+      marginProtectedUSD: finalContractPriceUSD,
+      liveAiCostUSD: 0,
+    });
+    ledgerEntry.outcomes.unshift('deal_closed_revenue', 'instant_checkout_paid');
+
+    this.meterless._recordTrustAudit(
+      'mem-policy-1',
+      'promote',
+      'service:StripeInstantCheckout',
+      { status: 'QUOTE_ISSUED', quoteId },
+      { status: 'DEAL_CLOSED_PAID', receiptId, amountPaidUSD, finalContractPriceUSD },
+      { scenarioId }
+    );
+
+    return {
+      ok: true,
+      status: 'DEAL_CLOSED_AND_PAID',
+      receiptId,
+      quoteId,
+      timestamp: new Date().toISOString(),
+      company,
+      amountPaidUSD: Number(amountPaidUSD),
+      finalContractPriceUSD: Number(finalContractPriceUSD),
+      provisioningStatus: 'INSTANT_PROVISIONING_UNLOCKED',
+      whatsappOwnerAlert: `💰 [LeadProof AI Closer] DEAL CLOSED & PAID! ${company} just completed Instant Checkout ($${Number(amountPaidUSD).toLocaleString()} USD paid now · $${Number(finalContractPriceUSD).toLocaleString()} total contract value). Receipt #${receiptId}.`,
+      meterlessReceipt: ledgerEntry,
+    };
+  }
+
 }

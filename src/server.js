@@ -101,6 +101,28 @@ export async function handleApiRequest({ method, pathname, body = {}, services }
     };
   }
 
+  if (method === 'POST' && pathname === '/api/closer/objection') {
+    const res = await engine.handleObjectionAndQuote({
+      scenarioId: body.scenarioId || 'trap-expansion-claim',
+      objectionType: body.objectionType || 'competitor_price',
+      customObjection: body.customObjection || '',
+      overrides: body.overrides || {},
+      liveAi: Boolean(body.liveAi),
+    });
+    return { status: 200, payload: res };
+  }
+
+  if (method === 'POST' && pathname === '/api/closer/checkout') {
+    const res = await engine.closeDealCheckout({
+      scenarioId: body.scenarioId || 'trap-expansion-claim',
+      quoteId: body.quoteId || 'qt_live',
+      amountPaidUSD: body.amountPaidUSD || 1500,
+      finalContractPriceUSD: body.finalContractPriceUSD || 24000,
+      company: body.company || 'Apex Logistics Corp',
+    });
+    return { status: 200, payload: res };
+  }
+
   if (method === 'POST' && pathname === '/api/forensic-ask') {
     const res = await engine.askForensicQuestion({
       scenarioId: body.scenarioId || 'trap-expansion-claim',
