@@ -1472,100 +1472,17 @@
         document.getElementById('closerRebuttalText').innerHTML = '🗣️ <strong>AI Closer Pitch:</strong> "' + formatCitationBadges(data.rebuttalSpeech) + '"';
 
         const offer = data.checkoutOffer;
+        const usdSign = String.fromCharCode(36);
         document.getElementById('checkoutQuoteBadge').textContent = 'INSTANT STRIPE DEAL CHECKOUT · ' + offer.quoteId + ' · Terms: ' + offer.paymentTerms;
         document.getElementById('checkoutItemTitle').textContent = offer.checkoutItemLabel;
-        document.getElementById('checkoutListPrice').textContent = 'List: 
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- + Number(offer.listPriceUSD).toLocaleString() + ' (' + offer.authorizedDiscountPct + '% Authorized Incentive)';
-        document.getElementById('checkoutFinalPrice').textContent = '
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- + Number(offer.finalContractPriceUSD).toLocaleString() + ' Net Contract';
+        document.getElementById('checkoutListPrice').textContent = 'List: ' + usdSign + Number(offer.listPriceUSD).toLocaleString() + ' (' + offer.authorizedDiscountPct + '% Authorized Incentive)';
+        document.getElementById('checkoutFinalPrice').textContent = usdSign + Number(offer.finalContractPriceUSD).toLocaleString() + ' Net Contract';
         document.getElementById('checkoutBonusNote').innerHTML = '🎁 <strong>Included Fast-Action Bonus:</strong> ' + offer.bonusIncluded + ' · <strong>MSA Ref:</strong> <code>' + offer.contractRef + '</code>';
-        document.getElementById('checkoutDueToday').textContent = '
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- + Number(offer.dueTodayUSD).toLocaleString() + ' USD';
+        document.getElementById('checkoutDueToday').textContent = usdSign + Number(offer.dueTodayUSD).toLocaleString() + ' USD';
 
         const payBtn = document.getElementById('btnPayCheckout');
         payBtn.disabled = false;
-        payBtn.textContent = '💳 Pay 
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- + Number(offer.dueTodayUSD).toLocaleString() + ' Deposit & Lock Offer Now';
+        payBtn.textContent = '💳 Pay ' + usdSign + Number(offer.dueTodayUSD).toLocaleString() + ' Deposit & Lock Offer Now';
       } finally {
         if (liveAi && btnAi) {
           btnAi.textContent = '🧠 Live AI Closer (muse-spark-1.3)';
@@ -1586,6 +1503,7 @@
 
     async function executeInstantCheckout() {
       if (!currentCloserQuote) return;
+      const usdSign = String.fromCharCode(36);
       const payBtn = document.getElementById('btnPayCheckout');
       payBtn.disabled = true;
       payBtn.textContent = '⏳ Processing Instant Checkout...';
@@ -1602,28 +1520,7 @@
         }),
       });
       const data = await res.json();
-      payBtn.textContent = '✅ DEAL CLOSED & PAID (
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- + Number(data.amountPaidUSD).toLocaleString() + ')';
+      payBtn.textContent = '✅ DEAL CLOSED & PAID (' + usdSign + Number(data.amountPaidUSD).toLocaleString() + ')';
       document.getElementById('closerStatusPill').textContent = '✅ DEAL CLOSED & PAID · ' + data.receiptId;
 
       const closedBanner = document.getElementById('dealClosedBanner');
@@ -1631,51 +1528,9 @@
       closedBanner.innerHTML =
         '<div style="font-weight:900; font-size:0.92rem; color:var(--success); margin-bottom:0.25rem;">🎉 ' +
         data.status +
-        ': 
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- +
+        ': ' + usdSign +
         Number(data.amountPaidUSD).toLocaleString() +
-        ' USD Collected · Contract Locked (
-      const text = document.getElementById('draftBody').innerText;
-      navigator.clipboard.writeText(text);
-      alert('Evidence-backed reply draft copied to clipboard!');
-    }
-
-    function speakOutreachDraft() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const text = document.getElementById('draftBody').innerText;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = currentScenarioId === 'smile-dental-implant' ? 'es-MX' : 'en-US';
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    }
-
-    initTheme();
-    loadScenarios();
-  </script>
-</body>
-</html>
- +
+        ' USD Collected · Contract Locked (' + usdSign +
         Number(data.finalContractPriceUSD).toLocaleString() +
         ')</div>' +
         '<div style="font-size:0.8rem; color:var(--text-main); margin-bottom:0.25rem;">' +
